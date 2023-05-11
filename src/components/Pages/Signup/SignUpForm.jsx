@@ -20,6 +20,7 @@ function SignUpForm() {
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [gender, setGender] = useState("");
 
   return (
@@ -45,7 +46,7 @@ function SignUpForm() {
             variant="standard"
           />
           <TextField
-            label="email"
+            label="Email"
             fullWidth
             required
             id="email"
@@ -56,7 +57,7 @@ function SignUpForm() {
             variant="standard"
           />
           <TextField
-            label="phone"
+            label="Phone"
             fullWidth
             required
             id="phone"
@@ -66,7 +67,7 @@ function SignUpForm() {
             variant="standard"
           />
           <TextField
-            label="password"
+            label="Password"
             fullWidth
             variant="standard"
             required
@@ -76,7 +77,22 @@ function SignUpForm() {
             autoFocus
             autoCapitalize
           />
-          <FormControl fullWidth>
+          <TextField
+            label="Confirm Password"
+            fullWidth
+            variant="standard"
+            required
+            id="confirmPassword"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            autoFocus
+            autoCapitalize
+            error={password !== confirmPassword}
+            helperText={
+              password !== confirmPassword ? "password does not match." : ""
+            }
+          />
+          <FormControl fullWidth sx={{ mt: 2 }}>
             <InputLabel>Gender</InputLabel>
             <Select
               id="gender"
