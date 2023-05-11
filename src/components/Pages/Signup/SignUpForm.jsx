@@ -4,8 +4,6 @@ import {
   TextField,
   Checkbox,
   Typography,
-  Avatar,
-  Link,
   FormControl,
   FormControlLabel,
   Select,
@@ -42,7 +40,7 @@ function SignUpForm() {
             value={name}
             onChange={(e) => setName(e.target.value)}
             autoFocus
-            autoCapitalize
+            autoCapitalize="true"
             variant="standard"
             margin="normal"
           />
@@ -54,7 +52,7 @@ function SignUpForm() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             autoFocus
-            autoCapitalize
+            autoCapitalize="true"
             variant="standard"
             margin="normal"
           />
@@ -80,7 +78,7 @@ function SignUpForm() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             autoFocus
-            autoCapitalize
+            autoCapitalize="true"
           />
           <TextField
             label="Confirm Password"
@@ -93,7 +91,7 @@ function SignUpForm() {
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
             autoFocus
-            autoCapitalize
+            autoCapitalize="true"
             error={password !== confirmPassword}
             helperText={
               password !== confirmPassword ? "password does not match." : ""

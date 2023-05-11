@@ -13,14 +13,14 @@ function Header() {
           </Box>
           <Box>
             <Button variant="contained" sx={{ mx: 1 }}>
-              <Link href="" color="white" underline="none">
+              <Link href="/login" color="white" underline="none">
                 Login
               </Link>
             </Button>
           </Box>
           <Box>
             <Button variant="outlined" sx={{ borderColor: "white" }}>
-              <Link href="" color="white" underline="none">
+              <Link href="/sign-up" color="white" underline="none">
                 Sign Up
               </Link>
             </Button>
