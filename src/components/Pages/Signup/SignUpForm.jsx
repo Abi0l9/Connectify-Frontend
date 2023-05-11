@@ -44,6 +44,7 @@ function SignUpForm() {
             autoFocus
             autoCapitalize
             variant="standard"
+            margin="normal"
           />
           <TextField
             label="Email"
@@ -55,10 +56,12 @@ function SignUpForm() {
             autoFocus
             autoCapitalize
             variant="standard"
+            margin="normal"
           />
           <TextField
             label="Phone"
             fullWidth
+            margin="normal"
             required
             id="phone"
             value={phone}
@@ -71,6 +74,8 @@ function SignUpForm() {
             fullWidth
             variant="standard"
             required
+            margin="normal"
+            type="password"
             id="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
@@ -81,6 +86,8 @@ function SignUpForm() {
             label="Confirm Password"
             fullWidth
             variant="standard"
+            margin="normal"
+            type="password"
             required
             id="confirmPassword"
             value={confirmPassword}
