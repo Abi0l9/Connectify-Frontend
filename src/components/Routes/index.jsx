@@ -5,6 +5,7 @@ import Profile from "../Pages/Profile";
 import Feed from "../Pages/Feeds";
 import FriendsPage from "../Pages/Friends";
 import Messages from "../Pages/Messages";
+import SignUp from "../Pages/Signup";
 
 function AppRoutes() {
   return (
@@ -14,7 +15,8 @@ function AppRoutes() {
         <Route path="/profile" element={<Profile />} />
         <Route path="/feed" element={<Feed />} />
         <Route path="/friends" element={<FriendsPage />} />
-        <Route path="/friends" element={<Messages />} />
+        <Route path="/messages" element={<Messages />} />
+        <Route path="/sign-up" element={<SignUp />} />
       </Routes>
     </Box>
   );

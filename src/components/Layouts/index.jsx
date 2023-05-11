@@ -2,14 +2,17 @@ import React from "react";
 import Header from "./Header";
 import Footer from "./Footer";
 import AppRoutes from "../Routes";
+import { Box } from "@mui/material";
 
 function Layout() {
   return (
-    <div>
+    <Box>
       <Header />
-      <AppRoutes />
+      <Box sx={{ minHeight: "100vh" }}>
+        <AppRoutes />
+      </Box>
       <Footer />
-    </div>
+    </Box>
   );
 }
 
