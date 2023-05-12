@@ -1,8 +1,10 @@
 import { Box } from "@mui/material";
 import { Cancel } from "@mui/icons-material";
 import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 
-const Notification = ({ message }) => {
+const Notification = () => {
+  const message = useSelector((store) => store.notification);
   const hide = {
     display: "none",
   };
@@ -12,6 +14,10 @@ const Notification = ({ message }) => {
   useEffect(() => {
     const show = {
       my: 2,
+      position: "absolute",
+      top: "4rem",
+      right: 0,
+      width: "100%",
       padding: "1rem .2rem",
       backgroundColor: "beige",
       textAlign: "center",

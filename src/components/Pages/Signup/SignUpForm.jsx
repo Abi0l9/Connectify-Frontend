@@ -14,8 +14,11 @@ import {
 } from "@mui/material";
 import React, { useState } from "react";
 import { CREATE_USER } from "../../../Queries/userQueries";
+import { useDispatch } from "react-redux";
+import { notification } from "../../../reducers/notificationReducer";
 
 function SignUpForm() {
+  const dispatch = useDispatch();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
@@ -26,26 +29,24 @@ function SignUpForm() {
   const [signup, result] = useMutation(CREATE_USER, {
     variables: { name, email, phone, password, gender },
     onError: (error) => {
-      console.log(error.message);
+      dispatch(notification(error.message, 5000));
     },
-    onCompleted: (data) => {
-      console.log(data);
+    onCompleted: (_data) => {
+      dispatch(notification("Registration successful", 5000));
     },
   });
 
   const handleSignup = async (e) => {
     e.preventDefault();
 
-    try{
-
-      const {data} = signup();
-      console.log(data)
+    try {
+      signup();
+      console.log(result);
       const userToVerify = {
-        email
-      }
-
-    } catch(e){
-      console.log(e.message)
+        email,
+      };
+    } catch (e) {
+      console.log(e.message);
     }
 
     setName("");

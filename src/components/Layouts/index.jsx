@@ -9,7 +9,7 @@ function Layout() {
   return (
     <Box>
       <Header />
-      <Notification message={"This is the notification"} />
+      <Notification />
       <Box sx={{ minHeight: "100vh" }}>
         <AppRoutes />
       </Box>
