@@ -1,3 +1,4 @@
+import { useMutation } from "@apollo/client";
 import {
   Box,
   Button,
@@ -12,6 +13,7 @@ import {
   InputLabel,
 } from "@mui/material";
 import React, { useState } from "react";
+import { CREATE_USER } from "../../../Queries/userQueries";
 
 function SignUpForm() {
   const [name, setName] = useState("");
@@ -20,6 +22,39 @@ function SignUpForm() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [gender, setGender] = useState("");
+
+  const [signup, result] = useMutation(CREATE_USER, {
+    variables: { name, email, phone, password, gender },
+    onError: (error) => {
+      console.log(error.message);
+    },
+    onCompleted: (data) => {
+      console.log(data);
+    },
+  });
+
+  const handleSignup = async (e) => {
+    e.preventDefault();
+
+    try{
+
+      const {data} = signup();
+      console.log(data)
+      const userToVerify = {
+        email
+      }
+
+    } catch(e){
+      console.log(e.message)
+    }
+
+    setName("");
+    setPassword("");
+    setPhone("");
+    setConfirmPassword("");
+    setGender("");
+    setEmail("");
+  };
 
   return (
     <Container component="main" maxWidth="xs">
@@ -31,7 +66,7 @@ function SignUpForm() {
         }}
       >
         <Typography>Sign Up Here</Typography>
-        <Box component="form" sx={{ mt: 2 }}>
+        <Box component="form" sx={{ mt: 2 }} onSubmit={(e) => handleSignup(e)}>
           <TextField
             label="Full Name"
             fullWidth
