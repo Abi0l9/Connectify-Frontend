@@ -11,6 +11,7 @@ import {
   MenuItem,
   Container,
   InputLabel,
+  CircularProgress,
 } from "@mui/material";
 import React, { useState } from "react";
 import { CREATE_USER } from "../../../Queries/userQueries";
@@ -34,9 +35,21 @@ function SignUpForm() {
     variables: { name, email, phone, password, gender },
     onError: (error) => {
       dispatch(notification(error.message, 5000));
+      if (error.message.includes("confirmation code")) {
+        setShowSignUp(!showSignUp);
+        setHideComp(!hideComp);
+      }
     },
     onCompleted: (_data) => {
       dispatch(notification("Registration successful", 3000));
+
+      setName("");
+      setPassword("");
+      setPhone("");
+      setConfirmPassword("");
+      setGender("");
+      setEmail("");
+
       setShowSignUp(!showSignUp);
       setHideComp(!hideComp);
     },
@@ -45,22 +58,29 @@ function SignUpForm() {
   const handleSignup = async (e) => {
     e.preventDefault();
 
-    try {
-      signup();
-    } catch (e) {
-      dispatch(notification(e.message, 4000));
-    }
-
-    setName("");
-    setPassword("");
-    setPhone("");
-    setConfirmPassword("");
-    setGender("");
-    setEmail("");
+    signup();
   };
 
   return (
     <Container component="main" maxWidth="xs">
+      {result.loading && (
+        <CircularProgress
+          sx={{
+            bgcolor: "transparent",
+            opacity: 0.5,
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            width: "100%",
+            height: "100%",
+            zIndex: 1000,
+            textAlign: "center",
+          }}
+        />
+      )}
+      <Box sx={{ display: hideComp ? "none" : "" }}>
+        <VerificationPage email={email} />
+      </Box>
       <Box sx={{ display: showSignUp ? "" : "none" }}>
         <Box
           sx={{
@@ -167,9 +187,6 @@ function SignUpForm() {
             </Button>
           </Box>
         </Box>
-      </Box>
-      <Box sx={{ display: hideComp ? "none" : "" }}>
-        <VerificationPage code={"oooooo"} />
       </Box>
     </Container>
   );

@@ -1,44 +1,80 @@
-import { Box, TextField, Typography, Container, Link } from "@mui/material";
-import { useState, useEffect } from "react";
+import {
+  Box,
+  TextField,
+  Typography,
+  Container,
+  Link,
+  Button,
+  CircularProgress,
+} from "@mui/material";
+import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { notification } from "../../../../reducers/notificationReducer";
 import { useNavigate } from "react-router-dom";
+import { useMutation } from "@apollo/client";
+import { CONFIRM_USER_REG, RESEND_CODE } from "../../../../Queries/userQueries";
 
-const VerificationPage = ({ code }) => {
-  const [newCode, setNewCode] = useState(code);
-  const [inputCode, setInputCode] = useState("");
+const VerificationPage = ({ email }) => {
+  const [regCode, setRegCode] = useState("");
   const [hideResend, setHideResend] = useState("none");
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const userData = localStorage.getItem("userData");
-    if (userData) {
-      setNewCode(userData.regCode);
-    }
-  }, []);
-
-  useEffect(() => {
-    if (inputCode.length === 6 && inputCode !== newCode) {
-      dispatch(notification("Invalid/expired code", 3000));
+  const [confirmReg, regConfirmResult] = useMutation(CONFIRM_USER_REG, {
+    variables: { email, regCode },
+    onError: (error) => {
+      dispatch(notification(error.message, 4000));
       setHideResend("");
-    } else if (inputCode.length === 6 && inputCode === newCode) {
-      dispatch(notification("Verification Successful", 3000));
+    },
+    onCompleted: () => {
+      dispatch(notification("Verification Successful", 4000));
       navigate("/login");
+    },
+  });
+
+  const [resendCode] = useMutation(RESEND_CODE, {
+    variables: { email },
+    onError: (e) => {
+      dispatch(notification(e.message, 4000));
+    },
+    onCompleted: () => {
+      dispatch(notification("A new code has been sent to your mailbox", 3000));
+      setHideResend("none");
+    },
+  });
+
+  const handleCodeConfirm = () => {
+    if (regCode.length === 6) {
+      confirmReg();
     }
-  }, [inputCode, dispatch, navigate, newCode]);
+  };
 
   const handleCodeInput = (e) => {
-    setInputCode(e.target.value);
+    setRegCode(e.target.value);
   };
 
   const handleCodeResend = () => {
-    dispatch(notification("A new code has been sent to your mailbox", 3000));
-    setHideResend("none");
+    resendCode();
   };
 
   return (
     <Container component="main" maxWidth="xs">
+      {regConfirmResult.loading && (
+        <CircularProgress
+          sx={{
+            bgcolor: "transparent",
+            opacity: 0.5,
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            width: "100%",
+            height: "100%",
+            zIndex: 1000,
+            textAlign: "center",
+          }}
+        />
+      )}
       <Box
         sx={{
           mt: "4rem",
@@ -65,13 +101,25 @@ const VerificationPage = ({ code }) => {
           <TextField
             label="Confirmation code"
             id="confirmation-code"
+            textAlign="center"
             onChange={handleCodeInput}
           />
+          <Box sx={{ my: 1, textAlign: "center" }}>
+            <Button
+              onClick={handleCodeConfirm}
+              type="button"
+              variant="contained"
+              color="success"
+              size="small"
+            >
+              Confirm
+            </Button>
+          </Box>
         </Box>
         <Box sx={{ mt: 3, display: hideResend }}>
           <Typography component="small" color="GrayText">
             Click{" "}
-            <span>
+            <span style={{ cursor: "pointer" }}>
               <Link underline="none" onClick={handleCodeResend}>
                 here
               </Link>
