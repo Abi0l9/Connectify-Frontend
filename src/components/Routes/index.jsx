@@ -7,7 +7,6 @@ import FriendsPage from "../Pages/Friends";
 import Messages from "../Pages/Messages";
 import SignUp from "../Pages/Signup";
 import Login from "../Pages/Login";
-import VerificationPage from "../Pages/Signup/Verification";
 
 function AppRoutes() {
   return (
@@ -20,7 +19,6 @@ function AppRoutes() {
         <Route path="/messages" element={<Messages />} />
         <Route path="/sign-up" element={<SignUp />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/verify-account" element={<VerificationPage />} />
       </Routes>
     </Box>
   );
