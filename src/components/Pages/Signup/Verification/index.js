@@ -101,7 +101,6 @@ const VerificationPage = ({ email }) => {
           <TextField
             label="Confirmation code"
             id="confirmation-code"
-            textAlign="center"
             onChange={handleCodeInput}
           />
           <Box sx={{ my: 1, textAlign: "center" }}>

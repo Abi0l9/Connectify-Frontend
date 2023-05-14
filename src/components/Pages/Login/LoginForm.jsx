@@ -13,14 +13,16 @@ import {
 import React, { useState } from "react";
 import { LOGIN } from "../../../Queries/userQueries";
 import { useDispatch } from "react-redux";
-import { notification } from "../../../reducers/notificationReducer";
+// import { notification } from "../../../reducers/notificationReducer";
+import { useNavigate } from "react-router-dom";
 
-function LoginForm() {
+function LoginForm({ setUser }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loginErrorText, setLoginErrorText] = useState("");
   const [isError, setIsError] = useState(false);
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const [login, result] = useMutation(LOGIN, {
     variables: { email, password },
@@ -29,8 +31,10 @@ function LoginForm() {
       setIsError(true);
     },
     onCompleted: (data) => {
-      dispatch(notification("login successful", 3000));
+      // dispatch(notification("login successful", 3000));
       localStorage.setItem("userData", JSON.stringify(data.login));
+      setUser(data.login);
+      navigate("/feed");
     },
   });
 

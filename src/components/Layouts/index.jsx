@@ -1,17 +1,30 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Header from "./Header";
 import Footer from "./Footer";
 import AppRoutes from "../Routes";
 import { Box } from "@mui/material";
 import Notification from "../Notification";
+import { useNavigate } from "react-router-dom";
 
 function Layout() {
+  const [user, setUser] = useState("");
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const details = JSON.parse(localStorage.getItem("userData"));
+
+    if (details) {
+      setUser(details);
+      navigate("/feed");
+    }
+  }, [navigate]);
+
   return (
     <Box>
-      <Header />
+      <Header user={user} setUser={setUser} />
       <Notification />
       <Box sx={{ minHeight: "100vh" }}>
-        <AppRoutes />
+        <AppRoutes user={user} setUser={setUser} />
       </Box>
       <Footer />
     </Box>

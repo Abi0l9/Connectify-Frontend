@@ -1,10 +1,10 @@
 import { Box } from "@mui/material";
 import LoginForm from "./LoginForm";
 
-const Login = () => {
+const Login = ({ setUser }) => {
   return (
     <Box>
-      <LoginForm />
+      <LoginForm setUser={setUser} />
     </Box>
   );
 };

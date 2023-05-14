@@ -18,12 +18,12 @@ import { createClient } from "graphql-ws";
 import store from "./reducers/store";
 
 const authLink = setContext((_, { headers }) => {
-  const token = localStorage.getItem("token");
+  const storage = localStorage.getItem("userData");
 
   return {
     headers: {
       ...headers,
-      authorization: token ? `Bearer ${token}` : null,
+      authorization: storage?.token ? `Bearer ${storage.token}` : null,
     },
   };
 });

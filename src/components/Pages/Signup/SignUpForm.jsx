@@ -99,10 +99,10 @@ function SignUpForm() {
               label="Full Name"
               fullWidth
               required
+              autoFocus
               id="name"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              autoFocus
               autoCapitalize="true"
               variant="standard"
               margin="normal"
@@ -114,7 +114,6 @@ function SignUpForm() {
               id="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              autoFocus
               autoCapitalize="true"
               variant="standard"
               margin="normal"
@@ -127,7 +126,6 @@ function SignUpForm() {
               id="phone"
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
-              autoFocus
               variant="standard"
             />
             <TextField
@@ -140,7 +138,6 @@ function SignUpForm() {
               id="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              autoFocus
               autoCapitalize="true"
             />
             <TextField
@@ -153,7 +150,6 @@ function SignUpForm() {
               id="confirmPassword"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
-              autoFocus
               autoCapitalize="true"
               error={password !== confirmPassword}
               helperText={

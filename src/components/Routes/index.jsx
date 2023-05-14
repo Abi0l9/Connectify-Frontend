@@ -8,17 +8,17 @@ import Messages from "../Pages/Messages";
 import SignUp from "../Pages/Signup";
 import Login from "../Pages/Login";
 
-function AppRoutes() {
+function AppRoutes({ user, setUser }) {
   return (
     <Box>
       <Routes>
         <Route path="" element={<SignUp />} />
         <Route path="/profile" element={<Profile />} />
-        <Route path="/feed" element={<Feed />} />
+        <Route path="/feed" element={<Feed user={user} />} />
         <Route path="/friends" element={<FriendsPage />} />
         <Route path="/messages" element={<Messages />} />
         <Route path="/sign-up" element={<SignUp />} />
-        <Route path="/login" element={<Login />} />
+        <Route path="/login" element={<Login setUser={setUser} />} />
       </Routes>
     </Box>
   );
