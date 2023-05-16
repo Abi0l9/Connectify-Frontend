@@ -1,7 +1,7 @@
 import { AppBar, Box, Button, Link, Toolbar, Typography } from "@mui/material";
 import UserMenu from "./UserMenu";
 
-function Header({ user, setUser }) {
+function Header({ user, setData, logout }) {
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
@@ -11,7 +11,7 @@ function Header({ user, setUser }) {
               <Typography variant="h4">Connectify</Typography>
             </Link>
           </Box>
-          {!user && (
+          {!user ? (
             <Box sx={{ display: "flex" }}>
               <Box>
                 <Button variant="contained" sx={{ mx: 1 }}>
@@ -28,10 +28,9 @@ function Header({ user, setUser }) {
                 </Button>
               </Box>
             </Box>
-          )}
-          {user && (
+          ) : (
             <Box>
-              <UserMenu user={user} setUser={setUser} />
+              <UserMenu user={user} setData={setData} logout={logout} />
             </Box>
           )}
         </Toolbar>

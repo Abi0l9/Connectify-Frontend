@@ -5,13 +5,14 @@ import {
   Notifications,
   Person,
   Settings,
+  VerifiedUserSharp,
 } from "@mui/icons-material";
 import { Avatar, Box, MenuItem, Typography, Menu, Badge } from "@mui/material";
 import { deepOrange } from "@mui/material/colors";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-const UserMenu = ({ user, setUser }) => {
+const UserMenu = ({ user, setData, logout }) => {
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
 
@@ -21,14 +22,13 @@ const UserMenu = ({ user, setUser }) => {
     setOpen(!open);
   };
 
-  const logout = () => {
-    localStorage.clear();
-    setUser("");
-    navigate("/login");
-  };
-
   const menuItems = [
-    { name: "Profile", avatar: <Person />, action: () => null },
+    { name: "Profile", avatar: <Person />, action: () => navigate("/profile") },
+    {
+      name: "Friends",
+      avatar: <VerifiedUserSharp />,
+      action: () => navigate("/friends"),
+    },
     { name: "Inbox", avatar: <Inbox />, action: () => null },
     { name: "Account", avatar: <Settings />, action: () => null },
     { name: "Logout", avatar: <Logout />, action: logout },

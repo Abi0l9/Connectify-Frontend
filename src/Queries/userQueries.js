@@ -90,12 +90,10 @@ export const GET_ALL_FEEDS = gql`
 `;
 
 export const GET_VERIFIED_USERS = gql`
-  mutation getAllFeeds($content: String!, $media: String!) {
-    getAllFeeds(content: $content, media: $media) {
-      id
-      content
-      poster
-      time
+  query {
+    getVerifiedUsers {
+      ...UserDetails
     }
   }
+  ${USER_DETAILS}
 `;

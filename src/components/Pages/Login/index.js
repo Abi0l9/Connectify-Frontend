@@ -3,17 +3,23 @@ import LoginForm from "./LoginForm";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-const Login = ({ setUser }) => {
+const Login = ({ setData, user }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const curUser = JSON.parse(localStorage.getItem("userData"));
-    setUser(curUser);
+    const data = JSON.parse(localStorage.getItem("userData"));
+    setData(data);
+  });
+
+  useEffect(() => {
+    if (user) {
+      navigate("/feed");
+    }
   });
 
   return (
     <Box>
-      <LoginForm setUser={setUser} />
+      <LoginForm setData={setData} />
     </Box>
   );
 };
