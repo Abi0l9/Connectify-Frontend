@@ -66,3 +66,36 @@ export const LOGIN = gql`
     }
   }
 `;
+
+export const CREATE_FEED = gql`
+  mutation createFeed($content: String!, $media: String) {
+    createFeed(content: $content, media: $media) {
+      id
+      content
+      poster
+      time
+    }
+  }
+`;
+
+export const GET_ALL_FEEDS = gql`
+  mutation getAllFeeds($content: String!, $media: String!) {
+    getAllFeeds(content: $content, media: $media) {
+      id
+      content
+      poster
+      time
+    }
+  }
+`;
+
+export const GET_VERIFIED_USERS = gql`
+  mutation getAllFeeds($content: String!, $media: String!) {
+    getAllFeeds(content: $content, media: $media) {
+      id
+      content
+      poster
+      time
+    }
+  }
+`;

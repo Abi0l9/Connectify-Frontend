@@ -12,9 +12,10 @@ function AppRoutes({ user, setUser }) {
   return (
     <Box>
       <Routes>
-        <Route path="" element={<SignUp />} />
+        <Route path="/sign-up" element={<SignUp />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/feed" element={<Feed user={user} />} />
+        <Route path="/" element={<Feed user={user} />} />
         <Route path="/friends" element={<FriendsPage />} />
         <Route path="/messages" element={<Messages />} />
         <Route path="/sign-up" element={<SignUp />} />

@@ -48,7 +48,6 @@ function SignUpForm() {
       setPhone("");
       setConfirmPassword("");
       setGender("");
-      setEmail("");
 
       setShowSignUp(!showSignUp);
       setHideComp(!hideComp);

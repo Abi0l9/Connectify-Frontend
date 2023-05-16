@@ -15,9 +15,14 @@ function Layout() {
 
     if (details) {
       setUser(details);
+    }
+  }, [setUser]);
+
+  useEffect(() => {
+    if (user) {
       navigate("/feed");
     }
-  }, [navigate]);
+  }, [setUser, user, navigate]);
 
   return (
     <Box>

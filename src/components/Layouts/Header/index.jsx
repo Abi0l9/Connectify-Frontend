@@ -7,7 +7,7 @@ function Header({ user, setUser }) {
       <AppBar position="static">
         <Toolbar>
           <Box sx={{ flexGrow: 1 }}>
-            <Link href="" color="inherit" underline="none">
+            <Link href="/" color="inherit" underline="none">
               <Typography variant="h4">Connectify</Typography>
             </Link>
           </Box>

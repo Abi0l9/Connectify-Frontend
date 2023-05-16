@@ -18,7 +18,7 @@ import { createClient } from "graphql-ws";
 import store from "./reducers/store";
 
 const authLink = setContext((_, { headers }) => {
-  const storage = localStorage.getItem("userData");
+  const storage = JSON.parse(localStorage.getItem("userData"));
 
   return {
     headers: {
