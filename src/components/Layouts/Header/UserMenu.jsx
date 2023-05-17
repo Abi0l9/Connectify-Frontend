@@ -7,10 +7,19 @@ import {
   Settings,
   VerifiedUserSharp,
 } from "@mui/icons-material";
-import { Avatar, Box, MenuItem, Typography, Menu, Badge } from "@mui/material";
+import {
+  Avatar,
+  Box,
+  MenuItem,
+  Typography,
+  Menu,
+  Badge,
+  Link,
+} from "@mui/material";
 import { deepOrange } from "@mui/material/colors";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Loading from "../../../Reusables/Loading";
 
 const UserMenu = ({ user, setData, logout }) => {
   const [open, setOpen] = useState(false);
@@ -23,7 +32,11 @@ const UserMenu = ({ user, setData, logout }) => {
   };
 
   const menuItems = [
-    { name: "Profile", avatar: <Person />, action: () => navigate("/profile") },
+    {
+      name: "Profile",
+      avatar: <Person />,
+      action: () => navigate(`/profile/${user.id}`),
+    },
     {
       name: "Friends",
       avatar: <VerifiedUserSharp />,
@@ -35,13 +48,15 @@ const UserMenu = ({ user, setData, logout }) => {
   ];
 
   if (!user) {
-    return null;
+    return <Loading />;
   }
 
   return (
     <Box sx={{ display: "flex", mx: 1, alignItems: "center" }}>
       <Typography variant="body1" fontWeight="bold">
-        {user?.name}
+        <Link color="inherit" underline="none" href={`/profile/${user.userId}`}>
+          {user?.name}
+        </Link>
       </Typography>
       <Avatar sx={{ bgcolor: deepOrange[500], mx: 1 }}>
         {user?.name?.split(" ")[0][0]}
