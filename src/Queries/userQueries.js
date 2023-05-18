@@ -63,6 +63,7 @@ export const LOGIN = gql`
       token
       image
       name
+      desired_name
     }
   }
 `;
@@ -76,6 +77,31 @@ export const CREATE_FEED = gql`
       time
     }
   }
+`;
+
+export const UPDATE_USER = gql`
+  mutation updateUser(
+    $name: String
+    $desired_name: String
+    $hobby: String
+    $image: String
+    $city: String
+    $country: String
+    $phone: String
+  ) {
+    updateUser(
+      name: $name
+      desired_name: $desired_name
+      hobby: $hobby
+      image: $image
+      city: $city
+      country: $country
+      phone: $phone
+    ) {
+      ...UserDetails
+    }
+  }
+  ${USER_DETAILS}
 `;
 
 export const GET_ALL_FEEDS = gql`

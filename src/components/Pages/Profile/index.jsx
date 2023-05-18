@@ -8,11 +8,20 @@ import {
   Typography,
 } from "@mui/material";
 import { deepOrange } from "@mui/material/colors";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import UpdateProfile from "./UpdateProfile";
 
 function Profile({ user }) {
-  console.log(user);
+  const [userToUpdate, setUserToUpdate] = useState("");
+
+  useEffect(() => {
+    setUserToUpdate(user);
+  }, [setUserToUpdate, user]);
+
+  const openModal = (main) => {
+    setUserToUpdate(main);
+  };
+
   return (
     <Container component="main">
       <Box>
@@ -42,7 +51,7 @@ function Profile({ user }) {
           <Box sx={{ textAlign: "center" }} flexGrow={1}>
             <Typography variant="h5"> {user?.desired_name}</Typography>
           </Box>
-          <Box component="span" sx={{ mx: 1 }}>
+          <Box component="span" sx={{ mx: 1 }} onClick={() => openModal(user)}>
             <Tooltip title="update info">
               <EditNote />
             </Tooltip>
@@ -75,9 +84,11 @@ function Profile({ user }) {
           <Typography>Hobbies: {user?.hobbies?.join(" , ")}</Typography>
         </Box>
       </Box>
-      <Box>
-        <UpdateProfile />
-      </Box>
+      {userToUpdate && (
+        <Box sx={{}}>
+          <UpdateProfile user={userToUpdate} />
+        </Box>
+      )}
     </Container>
   );
 }

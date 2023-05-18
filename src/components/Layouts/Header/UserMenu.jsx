@@ -35,7 +35,7 @@ const UserMenu = ({ user, setData, logout }) => {
     {
       name: "Profile",
       avatar: <Person />,
-      action: () => navigate(`/profile/${user.id}`),
+      action: () => navigate(`/profile/${user.desired_name}`),
     },
     {
       name: "Friends",
@@ -54,7 +54,11 @@ const UserMenu = ({ user, setData, logout }) => {
   return (
     <Box sx={{ display: "flex", mx: 1, alignItems: "center" }}>
       <Typography variant="body1" fontWeight="bold">
-        <Link color="inherit" underline="none" href={`/profile/${user.userId}`}>
+        <Link
+          color="inherit"
+          underline="none"
+          href={`/profile/${user.desired_name}`}
+        >
           {user?.name}
         </Link>
       </Typography>
