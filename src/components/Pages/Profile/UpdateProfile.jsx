@@ -1,15 +1,23 @@
 import { useMutation } from "@apollo/client";
-import { Box, Button, Container, TextField, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Container,
+  TextField,
+  Tooltip,
+  Typography,
+} from "@mui/material";
 import { useState } from "react";
-import { UPDATE_USER } from "../../../Queries/userQueries";
+import { GET_VERIFIED_USERS, UPDATE_USER } from "../../../Queries/userQueries";
 import Loading from "../../../Reusables/Loading";
 import { useDispatch } from "react-redux";
 import { notification } from "../../../reducers/notificationReducer";
+import { updateCache } from "../../../handlers";
 
 const UpdateProfile = ({ user }) => {
   const dispatch = useDispatch();
 
-  const [name, setName] = useState(user.name);
+  const [name, setName] = useState(user?.name);
   const [desired_name, setDesired_name] = useState(user?.desired_name || "");
   const [city, setCity] = useState(user?.city || "");
   const [country, setCountry] = useState(user?.country || "");
@@ -27,10 +35,16 @@ const UpdateProfile = ({ user }) => {
     },
     onCompleted: (data) => {
       dispatch(notification("Profile updated successfully", 4000));
-      console.log(data);
     },
     onError: (err) => {
       dispatch(notification(`an error occured  ${err.message}`, 4000));
+    },
+    update: (cache, response) => {
+      updateCache(
+        cache,
+        { query: GET_VERIFIED_USERS },
+        response.data.updateUser
+      );
     },
   });
 
@@ -75,6 +89,30 @@ const UpdateProfile = ({ user }) => {
             margin="normal"
             value={desired_name}
           />
+        </Box>
+        <Box>
+          <TextField
+            label="Gender"
+            variant="outlined"
+            name="gender"
+            fullWidth
+            margin="normal"
+            defaultValue={user?.gender}
+            disabled
+          />
+        </Box>
+        <Box>
+          <Tooltip title="To change this field, please, go to your account settings.">
+            <TextField
+              label="Email Address"
+              variant="outlined"
+              name="email"
+              fullWidth
+              margin="normal"
+              defaultValue={user?.email}
+              disabled
+            />
+          </Tooltip>
         </Box>
         <Box sx={{ display: "flex", justifyContent: "space-between" }}>
           <Box sx={{ mr: 1 }}>

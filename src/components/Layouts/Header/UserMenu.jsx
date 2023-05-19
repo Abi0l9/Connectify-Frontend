@@ -17,16 +17,34 @@ import {
   Link,
 } from "@mui/material";
 import { deepOrange } from "@mui/material/colors";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Loading from "../../../Reusables/Loading";
+import { useQuery } from "@apollo/client";
+import { GET_USER } from "../../../Queries/userQueries";
 
 const UserMenu = ({ user, setData, logout }) => {
   const [open, setOpen] = useState(false);
+  const [retrievedUser, setRetrievedUser] = useState({});
   const navigate = useNavigate();
 
-  const style = { display: open ? "" : "none" };
+  useEffect(() => {
+    if (user) {
+      setRetrievedUser(user);
+    }
+  }, [setRetrievedUser, user]);
 
+  const result = useQuery(GET_USER, {
+    variables: { getOneUserId: retrievedUser.userId },
+  });
+
+  const userDetails = result?.data?.getOneUser;
+
+  if (result.loading) {
+    return null;
+  }
+
+  const style = { display: open ? "" : "none" };
   const openMenu = (e) => {
     setOpen(!open);
   };
@@ -35,7 +53,7 @@ const UserMenu = ({ user, setData, logout }) => {
     {
       name: "Profile",
       avatar: <Person />,
-      action: () => navigate(`/profile/${user.desired_name}`),
+      action: () => navigate(`/profile/${userDetails.desired_name}`),
     },
     {
       name: "Friends",
@@ -47,23 +65,19 @@ const UserMenu = ({ user, setData, logout }) => {
     { name: "Logout", avatar: <Logout />, action: logout },
   ];
 
-  if (!user) {
-    return <Loading />;
-  }
-
   return (
     <Box sx={{ display: "flex", mx: 1, alignItems: "center" }}>
       <Typography variant="body1" fontWeight="bold">
         <Link
           color="inherit"
           underline="none"
-          href={`/profile/${user.desired_name}`}
+          href={`/profile/${userDetails.desired_name}`}
         >
-          {user?.name}
+          {userDetails?.name}
         </Link>
       </Typography>
       <Avatar sx={{ bgcolor: deepOrange[500], mx: 1 }}>
-        {user?.name?.split(" ")[0][0]}
+        {userDetails?.name?.split(" ")[0][0]}
       </Avatar>
       <Badge color="secondary" badgeContent={3} max={99}>
         <Notifications color="white" />

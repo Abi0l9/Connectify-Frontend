@@ -6,7 +6,7 @@ import { Box } from "@mui/material";
 import Notification from "../Notification";
 import { useNavigate } from "react-router-dom";
 
-function Layout() {
+function Layout({ allUsers, selected }) {
   const [data, setData] = useState("");
   const [user, setUser] = useState("");
   const navigate = useNavigate();
@@ -35,7 +35,12 @@ function Layout() {
       <Header user={user} setData={setData} logout={logout} />
       <Notification />
       <Box sx={{ minHeight: "100vh" }}>
-        <AppRoutes user={user} setData={setData} />
+        <AppRoutes
+          user={user}
+          selected={selected}
+          setData={setData}
+          allUsers={allUsers}
+        />
       </Box>
       <Footer />
     </Box>

@@ -10,17 +10,32 @@ import {
 import { deepOrange } from "@mui/material/colors";
 import React, { useEffect, useState } from "react";
 import UpdateProfile from "./UpdateProfile";
+import { useQuery } from "@apollo/client";
+import { GET_USER } from "../../../Queries/userQueries";
+import Loading from "../../../Reusables/Loading";
 
-function Profile({ user }) {
-  const [userToUpdate, setUserToUpdate] = useState("");
+function Profile({ user, loggedInUser }) {
+  const [userToUpdate, setUserToUpdate] = useState({});
 
   useEffect(() => {
-    setUserToUpdate(user);
+    if (user) {
+      setUserToUpdate(user);
+    }
   }, [setUserToUpdate, user]);
 
   const openModal = (main) => {
     setUserToUpdate(main);
   };
+
+  const result = useQuery(GET_USER, {
+    variables: { getOneUserId: userToUpdate.id },
+  });
+
+  if (result.loading) {
+    return <Loading />;
+  }
+
+  const userDetails = result?.data?.getOneUser;
 
   return (
     <Container component="main">
@@ -44,18 +59,26 @@ function Profile({ user }) {
               margin: "0 auto",
             }}
           >
-            {`${user?.name.split(" ")[0][0]}${user?.name.split(" ")[1][0]}`}
+            {`${userDetails?.name.split(" ")[0][0]}${
+              userDetails?.name.split(" ")[1][0]
+            }`}
           </Avatar>
         </Box>
         <Box sx={{ display: "flex" }}>
           <Box sx={{ textAlign: "center" }} flexGrow={1}>
-            <Typography variant="h5"> {user?.desired_name}</Typography>
+            <Typography variant="h5"> {userDetails?.desired_name}</Typography>
           </Box>
-          <Box component="span" sx={{ mx: 1 }} onClick={() => openModal(user)}>
-            <Tooltip title="update info">
-              <EditNote />
-            </Tooltip>
-          </Box>
+          {userDetails?.id === loggedInUser?.userId && (
+            <Box
+              component="span"
+              sx={{ mx: 1 }}
+              onClick={() => openModal(userDetails)}
+            >
+              <Tooltip title="update info">
+                <EditNote />
+              </Tooltip>
+            </Box>
+          )}
         </Box>
       </Box>
       <Divider />
@@ -63,30 +86,30 @@ function Profile({ user }) {
         <Box>
           <Box sx={{ display: "flex", justifyContent: "space-between" }}>
             <Typography>
-              First Name: <b>{user?.name.split(" ")[0]}</b>
+              First Name: <b>{userDetails?.name.split(" ")[0]}</b>
             </Typography>
             <Typography>
-              Last Name: <b>{user?.name.split(" ")[1]}</b>
+              Last Name: <b>{userDetails?.name.split(" ")[1]}</b>
             </Typography>
           </Box>
           <Typography>
-            Gender: <b>{user?.gender}</b>
+            Gender: <b>{userDetails?.gender}</b>
           </Typography>
           <Typography>
-            City: <b>{user?.city}</b>
+            City: <b>{userDetails?.city}</b>
           </Typography>
           <Typography>
-            Country: <b>{user?.country}</b>
+            Country: <b>{userDetails?.country}</b>
           </Typography>
           <Typography>
-            Occupation: <b>{user?.occupation}</b>
+            Occupation: <b>{userDetails?.occupation}</b>
           </Typography>
-          <Typography>Hobbies: {user?.hobbies?.join(" , ")}</Typography>
+          <Typography>Hobbies: {userDetails?.hobbies?.join(" , ")}</Typography>
         </Box>
       </Box>
-      {userToUpdate && (
+      {userDetails && (
         <Box sx={{}}>
-          <UpdateProfile user={userToUpdate} />
+          <UpdateProfile user={userDetails} />
         </Box>
       )}
     </Container>

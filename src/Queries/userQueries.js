@@ -115,9 +115,29 @@ export const GET_ALL_FEEDS = gql`
   }
 `;
 
+//QUERIES
 export const GET_VERIFIED_USERS = gql`
   query {
     getVerifiedUsers {
+      ...UserDetails
+    }
+  }
+  ${USER_DETAILS}
+`;
+
+export const GET_USER = gql`
+  query getOneUser($getOneUserId: String!) {
+    getOneUser(id: $getOneUserId) {
+      ...UserDetails
+    }
+  }
+  ${USER_DETAILS}
+`;
+
+//SUBSCRIPTIONS
+export const USER_UPDATED = gql`
+  subscription {
+    userUpdated {
       ...UserDetails
     }
   }
