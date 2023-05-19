@@ -8,7 +8,6 @@ export const updateCache = (cache, query, newUpdate) => {
       return seen.has(k) ? false : seen.add(k);
     });
   };
-  console.log(newUpdate);
 
   cache.updateQuery(query, ({ getVerifiedUsers }) => {
     return {

@@ -2,8 +2,11 @@ import { EditNote } from "@mui/icons-material";
 import {
   Avatar,
   Box,
+  Button,
   Container,
+  Dialog,
   Divider,
+  Stack,
   Tooltip,
   Typography,
 } from "@mui/material";
@@ -16,6 +19,7 @@ import Loading from "../../../Reusables/Loading";
 
 function Profile({ user, loggedInUser }) {
   const [userToUpdate, setUserToUpdate] = useState({});
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
     if (user) {
@@ -23,8 +27,12 @@ function Profile({ user, loggedInUser }) {
     }
   }, [setUserToUpdate, user]);
 
-  const openModal = (main) => {
-    setUserToUpdate(main);
+  const openModal = () => {
+    setOpen(true);
+  };
+
+  const closeModal = () => {
+    setOpen(false);
   };
 
   const result = useQuery(GET_USER, {
@@ -36,6 +44,18 @@ function Profile({ user, loggedInUser }) {
   }
 
   const userDetails = result?.data?.getOneUser;
+
+  const neededData = [
+    "name",
+    "gender",
+    "city",
+    "country",
+    "occupation",
+    "hobbies",
+  ];
+  const finalData =
+    userDetails &&
+    Object.entries(userDetails).filter(([k]) => neededData.includes(k));
 
   return (
     <Container component="main">
@@ -69,49 +89,44 @@ function Profile({ user, loggedInUser }) {
             <Typography variant="h5"> {userDetails?.desired_name}</Typography>
           </Box>
           {userDetails?.id === loggedInUser?.userId && (
-            <Box
-              component="span"
-              sx={{ mx: 1 }}
-              onClick={() => openModal(userDetails)}
-            >
+            <Box component="span" sx={{ mx: 1 }} onClick={openModal}>
               <Tooltip title="update info">
                 <EditNote />
               </Tooltip>
             </Box>
           )}
         </Box>
+        <Box sx={{ width: "100px", margin: "4px auto" }}>
+          <Stack spacing={3} direction="row">
+            <Button>Connect</Button>
+            <Button>Message</Button>
+          </Stack>
+        </Box>
       </Box>
       <Divider />
       <Box sx={{ width: "500px", margin: "10px auto" }}>
         <Box>
-          <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-            <Typography>
-              First Name: <b>{userDetails?.name.split(" ")[0]}</b>
-            </Typography>
-            <Typography>
-              Last Name: <b>{userDetails?.name.split(" ")[1]}</b>
-            </Typography>
-          </Box>
-          <Typography>
-            Gender: <b>{userDetails?.gender}</b>
-          </Typography>
-          <Typography>
-            City: <b>{userDetails?.city}</b>
-          </Typography>
-          <Typography>
-            Country: <b>{userDetails?.country}</b>
-          </Typography>
-          <Typography>
-            Occupation: <b>{userDetails?.occupation}</b>
-          </Typography>
-          <Typography>Hobbies: {userDetails?.hobbies?.join(" , ")}</Typography>
+          {finalData?.map(([k, v]) => (
+            <Box key={k} sx={{ display: "flex" }}>
+              <Box sx={{ width: "200px" }}>
+                <Typography variant="body2">
+                  {k.charAt(0).toUpperCase() + k.substr(1).toLowerCase()}:
+                </Typography>
+              </Box>
+              <Box sx={{ textAlign: "left" }}>
+                <Typography fontWeight="bold">{v}</Typography>
+              </Box>
+            </Box>
+          ))}
         </Box>
       </Box>
-      {userDetails && (
-        <Box sx={{}}>
-          <UpdateProfile user={userDetails} />
-        </Box>
-      )}
+      <Dialog open={open} onClose={closeModal}>
+        {userDetails && (
+          <Box sx={{ my: 2 }}>
+            <UpdateProfile user={userDetails} closeModal={closeModal} />
+          </Box>
+        )}
+      </Dialog>
     </Container>
   );
 }

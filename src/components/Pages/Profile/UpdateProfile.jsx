@@ -14,7 +14,7 @@ import { useDispatch } from "react-redux";
 import { notification } from "../../../reducers/notificationReducer";
 import { updateCache } from "../../../handlers";
 
-const UpdateProfile = ({ user }) => {
+const UpdateProfile = ({ user, closeModal }) => {
   const dispatch = useDispatch();
 
   const [name, setName] = useState(user?.name);
@@ -59,6 +59,7 @@ const UpdateProfile = ({ user }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    closeModal();
     update();
   };
 

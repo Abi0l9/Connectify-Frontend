@@ -1,6 +1,3 @@
-import { useQuery } from "@apollo/client";
-import React, { useState } from "react";
-import { GET_VERIFIED_USERS } from "../../../Queries/userQueries";
 import {
   Avatar,
   Box,
@@ -15,15 +12,7 @@ import {
 import { deepOrange } from "@mui/material/colors";
 import Loading from "../../../Reusables/Loading";
 
-function AllUsers() {
-  const [allUsers, setAllUsers] = useState();
-
-  useQuery(GET_VERIFIED_USERS, {
-    onCompleted: (data) => {
-      setAllUsers(data.getVerifiedUsers);
-    },
-  });
-
+function AllUsers({ allUsers }) {
   return (
     <Container component="main">
       <Box>

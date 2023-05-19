@@ -7,7 +7,7 @@ import Messages from "../Pages/Messages";
 import SignUp from "../Pages/Signup";
 import Login from "../Pages/Login";
 
-function AppRoutes({ user, setData, selected }) {
+function AppRoutes({ user, setData, allUsers, selected }) {
   return (
     <Box>
       <Routes>
@@ -18,7 +18,10 @@ function AppRoutes({ user, setData, selected }) {
         />
         <Route path="/feed" element={<Feed user={user} />} />
         <Route path="/" element={<Feed user={user} />} />
-        <Route path="/friends" element={<FriendsPage />} />
+        <Route
+          path="/friends"
+          element={<FriendsPage loggedInUser={user} allUsers={allUsers} />}
+        />
         <Route path="/messages" element={<Messages />} />
         <Route path="/sign-up" element={<SignUp />} />
         <Route
