@@ -17,6 +17,23 @@ const USER_DETAILS = gql`
   }
 `;
 
+const FRIEND_FIELDS = gql`
+  fragment FriendFields on Friend {
+    requests {
+      id
+      name
+    }
+    pendings {
+      id
+      name
+    }
+    accepted {
+      id
+      name
+    }
+  }
+`;
+
 export const CREATE_USER = gql`
   mutation createUser(
     $name: String!
@@ -115,6 +132,42 @@ export const GET_ALL_FEEDS = gql`
   }
 `;
 
+export const MAKE_FRIEND_REQUEST = gql`
+  mutation makeFriendRequest($friendId: String!) {
+    makeFriendRequest(friendId: $friendId) {
+      ...FriendFields
+    }
+  }
+  ${FRIEND_FIELDS}
+`;
+
+export const ACCEPT_FRIEND_REQUEST = gql`
+  mutation acceptFriendRequest($friendId: String!) {
+    acceptFriendRequest(friendId: $friendId) {
+      ...FriendFields
+    }
+  }
+  ${FRIEND_FIELDS}
+`;
+
+export const CANCEL_FRIEND_REQUEST = gql`
+  mutation cancelFriendRequest($friendId: String!) {
+    cancelFriendRequest(friendId: $friendId) {
+      ...FriendFields
+    }
+  }
+  ${FRIEND_FIELDS}
+`;
+
+export const DECLINE_FRIEND_REQUEST = gql`
+  mutation declineFriendRequest($friendId: String!) {
+    declineFriendRequest(friendId: $friendId) {
+      ...FriendFields
+    }
+  }
+  ${FRIEND_FIELDS}
+`;
+
 //QUERIES
 export const GET_VERIFIED_USERS = gql`
   query {
@@ -132,6 +185,15 @@ export const GET_USER = gql`
     }
   }
   ${USER_DETAILS}
+`;
+
+export const GET_FRIENDS = gql`
+  query {
+    getFriends {
+      ...FriendFields
+    }
+  }
+  ${FRIEND_FIELDS}
 `;
 
 //SUBSCRIPTIONS
