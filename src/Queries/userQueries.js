@@ -205,3 +205,39 @@ export const USER_UPDATED = gql`
   }
   ${USER_DETAILS}
 `;
+
+export const MADE_FRIEND_REQUEST = gql`
+  subscription {
+    madeFriendRequest {
+      ...FriendFields
+    }
+  }
+  ${FRIEND_FIELDS}
+`;
+
+export const ACCEPTED_FRIEND_REQUEST = gql`
+  subscription {
+    acceptedFriendRequest {
+      ...FriendFields
+    }
+  }
+  ${FRIEND_FIELDS}
+`;
+
+export const CANCELLED_FRIEND_REQUEST = gql`
+  subscription {
+    cancelledFriendRequest {
+      ...FriendFields
+    }
+  }
+  ${FRIEND_FIELDS}
+`;
+
+export const DECLINED_FRIEND_REQUEST = gql`
+  subscription {
+    declinedFriendRequest {
+      ...FriendFields
+    }
+  }
+  ${FRIEND_FIELDS}
+`;
