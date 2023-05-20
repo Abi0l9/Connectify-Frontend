@@ -15,14 +15,17 @@ const USER_DETAILS = gql`
       requests {
         id
         name
+        desired_name
       }
       pendings {
         id
         name
+        desired_name
       }
       accepted {
         id
         name
+        desired_name
       }
     }
     phone
@@ -36,14 +39,17 @@ const FRIEND_FIELDS = gql`
     requests {
       id
       name
+      desired_name
     }
     pendings {
       id
       name
+      desired_name
     }
     accepted {
       id
       name
+      desired_name
     }
   }
 `;

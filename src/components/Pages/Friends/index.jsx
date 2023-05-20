@@ -1,28 +1,46 @@
 import { Box, Container } from "@mui/material";
-import React, { useEffect, useState } from "react";
 import AllUsers from "./AllUsers";
 import { useSelector } from "react-redux";
+import PendingRequests from "./PendingRequests";
+import AcceptedRequests from "./AcceptedRequests";
+import ReceivedRequests from "./ReceivedRequests";
 
-function FriendsPage({ loggedInUser, allUsers }) {
-  const friends = useSelector((store) => store.friends);
-  const [filteredUsers, setFilteredUsers] = useState([]);
+function FriendsPage({ loggedInUser }) {
+  const { requests, pendings, accepted } = useSelector(
+    (store) => store.friends
+  );
+  const allUsers = useSelector((store) => store.users);
 
-  console.log(friends);
+  const filteredLoggedInUser = allUsers.filter(
+    (user) => user.id !== loggedInUser.userId
+  );
 
-  useEffect(() => {
-    if (loggedInUser && allUsers) {
-      const newList = allUsers.filter(
-        (user) => user.id !== loggedInUser.userId
-      );
+  // merged the list to make sure that the friends in the lists do not exist in
+  // the list of connect suggestions
+  const mergedList = requests
+    ?.concat(accepted)
+    .concat(pendings)
+    .map((user) => user.id);
 
-      setFilteredUsers(newList);
-    }
-  }, [loggedInUser, allUsers, setFilteredUsers]);
+  const suggestedConnections = filteredLoggedInUser.filter(
+    (user) => !mergedList?.includes(user.id)
+  );
+
+  console.log(suggestedConnections);
 
   return (
     <Container component="main">
       <Box>
-        <AllUsers allUsers={filteredUsers} />
+        <ReceivedRequests requests={requests} />
+      </Box>
+      <Box>
+        <AcceptedRequests accepted={accepted} />
+      </Box>
+      <Box>
+        <PendingRequests pendings={pendings} />
+      </Box>
+      <Box>
+        <AllUsers allUsers={suggestedConnections} />
       </Box>
       ;
     </Container>

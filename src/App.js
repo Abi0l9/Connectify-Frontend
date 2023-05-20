@@ -1,7 +1,7 @@
 import { Box } from "@mui/material";
 import "./App.css";
 import Layout from "./components/Layouts";
-import { useApolloClient, useQuery, useSubscription } from "@apollo/client";
+import { useQuery, useSubscription } from "@apollo/client";
 import {
   GET_FRIENDS,
   GET_VERIFIED_USERS,
@@ -13,6 +13,7 @@ import { useMatch } from "react-router-dom";
 import { updateCache } from "./handlers";
 import { useDispatch } from "react-redux";
 import { getAllFriends } from "./reducers/friendsReducer";
+import { getUsers } from "./reducers/usersReducer";
 
 function App() {
   const dispatch = useDispatch();
@@ -28,12 +29,14 @@ function App() {
   useQuery(GET_VERIFIED_USERS, {
     onCompleted: (data) => {
       setAllUsers(data.getVerifiedUsers);
+      dispatch(getUsers(data.getVerifiedUsers));
     },
   });
 
   useQuery(GET_FRIENDS, {
     onCompleted: ({ getFriends }) => {
       setFriends(getFriends);
+      console.log(getFriends);
       dispatch(getAllFriends(getFriends));
     },
   });
