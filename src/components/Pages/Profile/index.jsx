@@ -13,13 +13,24 @@ import {
 import { deepOrange } from "@mui/material/colors";
 import React, { useEffect, useState } from "react";
 import UpdateProfile from "./UpdateProfile";
-import { useQuery } from "@apollo/client";
-import { GET_USER } from "../../../Queries/userQueries";
+import { useMutation, useQuery } from "@apollo/client";
+import { GET_USER, MAKE_FRIEND_REQUEST } from "../../../Queries/userQueries";
 import Loading from "../../../Reusables/Loading";
+import { useDispatch } from "react-redux";
+import { notification } from "../../../reducers/notificationReducer";
 
 function Profile({ user, loggedInUser }) {
+  const dispatch = useDispatch();
   const [userToUpdate, setUserToUpdate] = useState({});
   const [open, setOpen] = useState(false);
+  const [makeRequest, requestResult] = useMutation(MAKE_FRIEND_REQUEST, {
+    onCompleted: () => {
+      dispatch(notification("Request sent", 3000));
+    },
+    onError: (e) => {
+      dispatch(notification(e.message, 3000));
+    },
+  });
 
   useEffect(() => {
     if (user) {
@@ -44,6 +55,15 @@ function Profile({ user, loggedInUser }) {
   }
 
   const userDetails = result?.data?.getOneUser;
+
+  //handler for sending connect requests
+  const handleConnect = () => {
+    makeRequest({ variables: { friendId: userDetails?.id } });
+  };
+
+  if (requestResult.loading) {
+    return <Loading />;
+  }
 
   const neededData = [
     "name",
@@ -96,12 +116,14 @@ function Profile({ user, loggedInUser }) {
             </Box>
           )}
         </Box>
-        <Box sx={{ width: "100px", margin: "4px auto" }}>
-          <Stack spacing={3} direction="row">
-            <Button>Connect</Button>
-            <Button>Message</Button>
-          </Stack>
-        </Box>
+        {userDetails?.id !== loggedInUser?.userId && (
+          <Box sx={{ width: "100px", margin: "4px auto" }}>
+            <Stack spacing={3} direction="row">
+              <Button onClick={handleConnect}>Connect</Button>
+              <Button>Message</Button>
+            </Stack>
+          </Box>
+        )}
       </Box>
       <Divider />
       <Box sx={{ width: "500px", margin: "10px auto" }}>

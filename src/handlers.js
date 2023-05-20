@@ -10,15 +10,25 @@ export const updateCache = (cache, query, newUpdate) => {
   };
 
   cache.updateQuery(query, ({ getVerifiedUsers }) => {
-    return {
-      getVerifiedUsers: uniqByEmail(
-        getVerifiedUsers?.map((user) => {
-          if (user.id === newUpdate.id) {
-            return newUpdate;
-          }
-          return user;
-        })
-      ),
-    };
+    const userExists = getVerifiedUsers.find(
+      (user) => user.id === newUpdate.id
+    );
+
+    if (userExists) {
+      return {
+        getVerifiedUsers: uniqByEmail(
+          getVerifiedUsers?.map((user) => {
+            if (user.id === newUpdate.id) {
+              return newUpdate;
+            }
+            return user;
+          })
+        ),
+      };
+    } else if (!userExists) {
+      return {
+        getVerifiedUsers: uniqByEmail(getVerifiedUsers?.concat(newUpdate)),
+      };
+    }
   });
 };

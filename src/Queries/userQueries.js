@@ -11,6 +11,20 @@ const USER_DETAILS = gql`
     country
     continent
     image
+    friends {
+      requests {
+        id
+        name
+      }
+      pendings {
+        id
+        name
+      }
+      accepted {
+        id
+        name
+      }
+    }
     phone
     hobbies
     confirmationCode
@@ -135,37 +149,37 @@ export const GET_ALL_FEEDS = gql`
 export const MAKE_FRIEND_REQUEST = gql`
   mutation makeFriendRequest($friendId: String!) {
     makeFriendRequest(friendId: $friendId) {
-      ...FriendFields
+      ...UserDetails
     }
   }
-  ${FRIEND_FIELDS}
+  ${USER_DETAILS}
 `;
 
 export const ACCEPT_FRIEND_REQUEST = gql`
   mutation acceptFriendRequest($friendId: String!) {
     acceptFriendRequest(friendId: $friendId) {
-      ...FriendFields
+      ...UserDetails
     }
   }
-  ${FRIEND_FIELDS}
+  ${USER_DETAILS}
 `;
 
 export const CANCEL_FRIEND_REQUEST = gql`
   mutation cancelFriendRequest($friendId: String!) {
     cancelFriendRequest(friendId: $friendId) {
-      ...FriendFields
+      ...UserDetails
     }
   }
-  ${FRIEND_FIELDS}
+  ${USER_DETAILS}
 `;
 
 export const DECLINE_FRIEND_REQUEST = gql`
   mutation declineFriendRequest($friendId: String!) {
     declineFriendRequest(friendId: $friendId) {
-      ...FriendFields
+      ...UserDetails
     }
   }
-  ${FRIEND_FIELDS}
+  ${USER_DETAILS}
 `;
 
 //QUERIES
@@ -209,35 +223,35 @@ export const USER_UPDATED = gql`
 export const MADE_FRIEND_REQUEST = gql`
   subscription {
     madeFriendRequest {
-      ...FriendFields
+      ...UserDetails
     }
   }
-  ${FRIEND_FIELDS}
+  ${USER_DETAILS}
 `;
 
 export const ACCEPTED_FRIEND_REQUEST = gql`
   subscription {
     acceptedFriendRequest {
-      ...FriendFields
+      ...UserDetails
     }
   }
-  ${FRIEND_FIELDS}
+  ${USER_DETAILS}
 `;
 
 export const CANCELLED_FRIEND_REQUEST = gql`
   subscription {
     cancelledFriendRequest {
-      ...FriendFields
+      ...UserDetails
     }
   }
-  ${FRIEND_FIELDS}
+  ${USER_DETAILS}
 `;
 
 export const DECLINED_FRIEND_REQUEST = gql`
   subscription {
     declinedFriendRequest {
-      ...FriendFields
+      ...UserDetails
     }
   }
-  ${FRIEND_FIELDS}
+  ${USER_DETAILS}
 `;

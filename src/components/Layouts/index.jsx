@@ -6,7 +6,7 @@ import { Box } from "@mui/material";
 import Notification from "../Notification";
 import { useNavigate } from "react-router-dom";
 
-function Layout({ allUsers, selected }) {
+function Layout({ allUsers, selected, friends }) {
   const [data, setData] = useState("");
   const [user, setUser] = useState("");
   const navigate = useNavigate();
@@ -40,6 +40,7 @@ function Layout({ allUsers, selected }) {
           selected={selected}
           setData={setData}
           allUsers={allUsers}
+          friends={friends}
         />
       </Box>
       <Footer />

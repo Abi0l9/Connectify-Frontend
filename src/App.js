@@ -2,15 +2,23 @@ import { Box } from "@mui/material";
 import "./App.css";
 import Layout from "./components/Layouts";
 import { useApolloClient, useQuery, useSubscription } from "@apollo/client";
-import { GET_VERIFIED_USERS, USER_UPDATED } from "./Queries/userQueries";
+import {
+  GET_FRIENDS,
+  GET_VERIFIED_USERS,
+  MADE_FRIEND_REQUEST,
+  USER_UPDATED,
+} from "./Queries/userQueries";
 import { useState } from "react";
 import { useMatch } from "react-router-dom";
 import { updateCache } from "./handlers";
+import { useDispatch } from "react-redux";
+import { getAllFriends } from "./reducers/friendsReducer";
 
 function App() {
-  const client = useApolloClient();
+  const dispatch = useDispatch();
 
-  const [allUsers, setAllUsers] = useState();
+  const [allUsers, setAllUsers] = useState([]);
+  const [friends, setFriends] = useState([]);
 
   const match = useMatch("/profile/:desired_name");
   const selected = match
@@ -20,6 +28,19 @@ function App() {
   useQuery(GET_VERIFIED_USERS, {
     onCompleted: (data) => {
       setAllUsers(data.getVerifiedUsers);
+    },
+  });
+
+  useQuery(GET_FRIENDS, {
+    onCompleted: ({ getFriends }) => {
+      setFriends(getFriends);
+      dispatch(getAllFriends(getFriends));
+    },
+  });
+
+  useSubscription(MADE_FRIEND_REQUEST, {
+    onData: (data) => {
+      console.log(data);
     },
   });
 
@@ -34,7 +55,7 @@ function App() {
 
   return (
     <Box>
-      <Layout allUsers={allUsers} selected={selected} />
+      <Layout allUsers={allUsers} selected={selected} friends={friends} />
     </Box>
   );
 }
