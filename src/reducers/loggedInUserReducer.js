@@ -2,19 +2,28 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const loggedInUserSlice = createSlice({
   name: "currentUser",
-  initialState: [],
+  initialState: {},
   reducers: {
-    getCurLoggedInUser(state, action) {
+    getCurLoggedInUser(_state, action) {
       return action.payload;
+    },
+    clearCurLoggedInUser(_state, _action) {
+      return {};
     },
   },
 });
 
-const { getCurLoggedInUser } = loggedInUserSlice.actions;
+const { getCurLoggedInUser, clearCurLoggedInUser } = loggedInUserSlice.actions;
 
 export const getCurUser = (user) => {
   return async (dispatch) => {
     dispatch(getCurLoggedInUser(user));
+  };
+};
+
+export const logoutCurUser = () => {
+  return async (dispatch) => {
+    dispatch(clearCurLoggedInUser());
   };
 };
 

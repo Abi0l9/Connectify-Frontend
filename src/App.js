@@ -1,7 +1,7 @@
 import { Box } from "@mui/material";
 import "./App.css";
 import Layout from "./components/Layouts";
-import { useQuery, useSubscription } from "@apollo/client";
+import { useApolloClient, useQuery, useSubscription } from "@apollo/client";
 import {
   ACCEPTED_FRIEND_REQUEST,
   CANCELLED_FRIEND_REQUEST,
@@ -17,11 +17,13 @@ import { updateCache } from "./handlers";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllFriends } from "./reducers/friendsReducer";
 import { getUsers } from "./reducers/usersReducer";
-import { getCurUser } from "./reducers/loggedInUserReducer";
+import { getCurUser, logoutCurUser } from "./reducers/loggedInUserReducer";
 
 function App() {
+  const client = useApolloClient();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [loggedInUser, setLoggedInUser] = useState();
 
   const allUsers = useSelector((store) => store.users);
 
@@ -35,6 +37,7 @@ function App() {
 
     if (details) {
       dispatch(getCurUser(details));
+      setLoggedInUser(details);
     }
   }, [dispatch]);
 
@@ -94,13 +97,16 @@ function App() {
   });
 
   const logout = () => {
+    setLoggedInUser(null);
+    client.resetStore();
     localStorage.clear();
+    dispatch(logoutCurUser());
     navigate("/login");
   };
 
   return (
     <Box>
-      <Layout logout={logout} selected={selected} />
+      <Layout loggedInUser={loggedInUser} logout={logout} selected={selected} />
     </Box>
   );
 }

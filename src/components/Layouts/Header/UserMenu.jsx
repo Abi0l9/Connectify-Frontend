@@ -47,7 +47,7 @@ const UserMenu = ({ logout }) => {
     {
       name: "Profile",
       avatar: <Person />,
-      action: () => navigate(`/profile/${userDetails.desired_name}`),
+      action: () => navigate(`/profile/${userDetails?.desired_name}`),
     },
     {
       name: "Friends",
@@ -65,7 +65,7 @@ const UserMenu = ({ logout }) => {
         <Link
           color="inherit"
           underline="none"
-          href={`/profile/${userDetails.desired_name}`}
+          href={`/profile/${userDetails?.desired_name}`}
         >
           {userDetails?.name}
         </Link>

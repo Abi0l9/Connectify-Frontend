@@ -3,12 +3,11 @@ import Footer from "./Footer";
 import AppRoutes from "../Routes";
 import { Box } from "@mui/material";
 import Notification from "../Notification";
-import { useNavigate } from "react-router-dom";
 
-function Layout({ selected, logout }) {
+function Layout({ selected, logout, loggedInUser }) {
   return (
     <Box>
-      <Header logout={logout} />
+      <Header logout={logout} loggedInUser={loggedInUser} />
       <Notification />
       <Box sx={{ minHeight: "100vh" }}>
         <AppRoutes selected={selected} />

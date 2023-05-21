@@ -6,17 +6,37 @@ import FriendsPage from "../Pages/Friends";
 import Messages from "../Pages/Messages";
 import SignUp from "../Pages/Signup";
 import Login from "../Pages/Login";
+import { useSelector } from "react-redux";
 
 function AppRoutes({ selected }) {
+  const loggedInUser = useSelector((state) => state.curUser);
+
   return (
     <Box>
       <Routes>
         <Route path="/sign-up" element={<SignUp />} />
-        <Route path="/profile/:id" element={<Profile user={selected} />} />
-        <Route path="/feed" element={<Feed />} />
-        <Route path="/" element={<Feed />} />
-        <Route path="/friends" element={<FriendsPage />} />
-        <Route path="/messages" element={<Messages />} />
+        <Route
+          path="/profile/:id"
+          element={
+            !loggedInUser?.userId ? <Login /> : <Profile user={selected} />
+          }
+        />
+        <Route
+          path="/feed"
+          element={!loggedInUser?.userId ? <Login /> : <Feed />}
+        />
+        <Route
+          path="/"
+          element={!loggedInUser?.userId ? <Login /> : <Feed />}
+        />
+        <Route
+          path="/friends"
+          element={!loggedInUser?.userId ? <Login /> : <FriendsPage />}
+        />
+        <Route
+          path="/messages"
+          element={!loggedInUser?.userId ? <Login /> : <Messages />}
+        />
         <Route path="/sign-up" element={<SignUp />} />
         <Route path="/login" element={<Login />} />
       </Routes>
