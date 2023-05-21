@@ -4,16 +4,25 @@ import { useSelector } from "react-redux";
 import PendingRequests from "./PendingRequests";
 import AcceptedRequests from "./AcceptedRequests";
 import ReceivedRequests from "./ReceivedRequests";
+import SuggestedConnects from "./SuggestedConnects";
 
 function FriendsPage({ loggedInUser }) {
-  const { requests, pendings, accepted } = useSelector(
-    (store) => store.friends
-  );
+  // const { requests, pendings, accepted } = useSelector(
+  //   (store) => store.friends
+  // );
   const allUsers = useSelector((store) => store.users);
 
   const filteredLoggedInUser = allUsers.filter(
     (user) => user.id !== loggedInUser.userId
   );
+
+  const loggedInUserFriends = allUsers.find(
+    (user) => user.id === loggedInUser.userId
+  )?.friends;
+
+  const requests = loggedInUserFriends?.requests;
+  const pendings = loggedInUserFriends?.pendings;
+  const accepted = loggedInUserFriends?.accepted;
 
   // merged the list to make sure that the friends in the lists do not exist in
   // the list of connect suggestions
@@ -25,8 +34,6 @@ function FriendsPage({ loggedInUser }) {
   const suggestedConnections = filteredLoggedInUser.filter(
     (user) => !mergedList?.includes(user.id)
   );
-
-  console.log(suggestedConnections);
 
   return (
     <Container component="main">
@@ -40,8 +47,11 @@ function FriendsPage({ loggedInUser }) {
         <PendingRequests pendings={pendings} />
       </Box>
       <Box>
-        <AllUsers allUsers={suggestedConnections} />
+        <SuggestedConnects suggestions={suggestedConnections} />
       </Box>
+      {/* <Box>
+        <AllUsers allUsers={suggestedConnections} />
+      </Box> */}
       ;
     </Container>
   );

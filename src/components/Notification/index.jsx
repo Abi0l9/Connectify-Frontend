@@ -23,6 +23,7 @@ const Notification = () => {
       textAlign: "center",
       fontSize: "1.1rem",
       fontFamily: "arial",
+      zIndex: 1000,
     };
 
     if (message) {

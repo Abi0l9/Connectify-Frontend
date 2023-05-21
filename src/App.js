@@ -3,6 +3,9 @@ import "./App.css";
 import Layout from "./components/Layouts";
 import { useQuery, useSubscription } from "@apollo/client";
 import {
+  ACCEPTED_FRIEND_REQUEST,
+  CANCELLED_FRIEND_REQUEST,
+  DECLINED_FRIEND_REQUEST,
   GET_FRIENDS,
   GET_VERIFIED_USERS,
   MADE_FRIEND_REQUEST,
@@ -42,8 +45,35 @@ function App() {
   });
 
   useSubscription(MADE_FRIEND_REQUEST, {
-    onData: (data) => {
-      console.log(data);
+    onData: ({ data, client }) => {
+      const updatedUser = data.data.madeFriendRequest;
+
+      updateCache(client.cache, { query: GET_VERIFIED_USERS }, updatedUser);
+    },
+  });
+
+  useSubscription(ACCEPTED_FRIEND_REQUEST, {
+    onData: ({ data, client }) => {
+      const updatedUser = data.data.acceptedFriendRequest;
+      console.log(updatedUser);
+
+      updateCache(client.cache, { query: GET_VERIFIED_USERS }, updatedUser);
+    },
+  });
+
+  useSubscription(CANCELLED_FRIEND_REQUEST, {
+    onData: ({ data, client }) => {
+      const updatedUser = data.data.cancelledFriendRequest;
+
+      updateCache(client.cache, { query: GET_VERIFIED_USERS }, updatedUser);
+    },
+  });
+
+  useSubscription(DECLINED_FRIEND_REQUEST, {
+    onData: ({ data, client }) => {
+      const updatedUser = data.data.declinedFriendRequest;
+
+      updateCache(client.cache, { query: GET_VERIFIED_USERS }, updatedUser);
     },
   });
 
