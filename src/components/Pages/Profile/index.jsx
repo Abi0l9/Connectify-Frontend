@@ -16,12 +16,15 @@ import UpdateProfile from "./UpdateProfile";
 import { useMutation, useQuery } from "@apollo/client";
 import { GET_USER, MAKE_FRIEND_REQUEST } from "../../../Queries/userQueries";
 import Loading from "../../../Reusables/Loading";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { notification } from "../../../reducers/notificationReducer";
 
-function Profile({ user, loggedInUser }) {
+function Profile({ user }) {
   const dispatch = useDispatch();
+  const curUser = useSelector((state) => state.curUser);
+
   const [userToUpdate, setUserToUpdate] = useState({});
+
   const [open, setOpen] = useState(false);
   const [makeRequest, requestResult] = useMutation(MAKE_FRIEND_REQUEST, {
     onCompleted: () => {
@@ -108,7 +111,7 @@ function Profile({ user, loggedInUser }) {
           <Box sx={{ textAlign: "center" }} flexGrow={1}>
             <Typography variant="h5"> {userDetails?.desired_name}</Typography>
           </Box>
-          {userDetails?.id === loggedInUser?.userId && (
+          {userDetails?.id === curUser?.userId && (
             <Box component="span" sx={{ mx: 1 }} onClick={openModal}>
               <Tooltip title="update info">
                 <EditNote />
@@ -116,7 +119,7 @@ function Profile({ user, loggedInUser }) {
             </Box>
           )}
         </Box>
-        {userDetails?.id !== loggedInUser?.userId && (
+        {userDetails?.id !== curUser?.userId && (
           <Box sx={{ width: "100px", margin: "4px auto" }}>
             <Stack spacing={3} direction="row">
               <Button onClick={handleConnect}>Connect</Button>

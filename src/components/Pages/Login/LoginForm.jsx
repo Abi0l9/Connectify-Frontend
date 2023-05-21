@@ -16,7 +16,7 @@ import { useDispatch } from "react-redux";
 // import { notification } from "../../../reducers/notificationReducer";
 import { useNavigate } from "react-router-dom";
 
-function LoginForm({ setData }) {
+function LoginForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loginErrorText, setLoginErrorText] = useState("");
@@ -33,7 +33,6 @@ function LoginForm({ setData }) {
     onCompleted: (data) => {
       // dispatch(notification("login successful", 3000));
       localStorage.setItem("userData", JSON.stringify(data.login));
-      setData(data.login);
       navigate("/feed");
     },
   });

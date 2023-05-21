@@ -17,25 +17,19 @@ import {
   Link,
 } from "@mui/material";
 import { deepOrange } from "@mui/material/colors";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Loading from "../../../Reusables/Loading";
 import { useQuery } from "@apollo/client";
 import { GET_USER } from "../../../Queries/userQueries";
+import { useSelector } from "react-redux";
 
-const UserMenu = ({ user, setData, logout }) => {
+const UserMenu = ({ logout }) => {
   const [open, setOpen] = useState(false);
-  const [retrievedUser, setRetrievedUser] = useState({});
+  const loggedInUser = useSelector((state) => state.curUser);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (user) {
-      setRetrievedUser(user);
-    }
-  }, [setRetrievedUser, user]);
-
   const result = useQuery(GET_USER, {
-    variables: { getOneUserId: retrievedUser.userId },
+    variables: { getOneUserId: loggedInUser.userId },
   });
 
   const userDetails = result?.data?.getOneUser;

@@ -1,7 +1,19 @@
 import { AppBar, Box, Button, Link, Toolbar, Typography } from "@mui/material";
 import UserMenu from "./UserMenu";
+import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+import { useSelector } from "react-redux";
 
-function Header({ user, setData, logout }) {
+function Header({ logout }) {
+  const loggedInUser = useSelector((state) => state.curUser);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!loggedInUser) {
+      navigate("/login");
+    }
+  }, [navigate]);
+
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
@@ -11,7 +23,7 @@ function Header({ user, setData, logout }) {
               <Typography variant="h4">Connectify</Typography>
             </Link>
           </Box>
-          {!user ? (
+          {!loggedInUser ? (
             <Box sx={{ display: "flex" }}>
               <Box>
                 <Button variant="contained" sx={{ mx: 1 }}>
@@ -30,7 +42,7 @@ function Header({ user, setData, logout }) {
             </Box>
           ) : (
             <Box>
-              <UserMenu user={user} setData={setData} logout={logout} />
+              <UserMenu logout={logout} />
             </Box>
           )}
         </Toolbar>

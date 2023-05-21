@@ -1,28 +1,23 @@
 import { Box, Container } from "@mui/material";
-import AllUsers from "./AllUsers";
 import { useSelector } from "react-redux";
 import PendingRequests from "./PendingRequests";
 import AcceptedRequests from "./AcceptedRequests";
 import ReceivedRequests from "./ReceivedRequests";
 import SuggestedConnects from "./SuggestedConnects";
 
-function FriendsPage({ loggedInUser }) {
-  // const { requests, pendings, accepted } = useSelector(
-  //   (store) => store.friends
-  // );
+function FriendsPage() {
   const allUsers = useSelector((store) => store.users);
+  const curUser = useSelector((state) => state.curUser);
 
-  const filteredLoggedInUser = allUsers.filter(
-    (user) => user.id !== loggedInUser.userId
-  );
+  const filteredCurUser = allUsers.filter((user) => user.id !== curUser.userId);
 
-  const loggedInUserFriends = allUsers.find(
-    (user) => user.id === loggedInUser.userId
+  const curUserFriends = allUsers.find(
+    (user) => user.id === curUser.userId
   )?.friends;
 
-  const requests = loggedInUserFriends?.requests;
-  const pendings = loggedInUserFriends?.pendings;
-  const accepted = loggedInUserFriends?.accepted;
+  const requests = curUserFriends?.requests;
+  const pendings = curUserFriends?.pendings;
+  const accepted = curUserFriends?.accepted;
 
   // merged the list to make sure that the friends in the lists do not exist in
   // the list of connect suggestions
@@ -31,7 +26,7 @@ function FriendsPage({ loggedInUser }) {
     .concat(pendings)
     .map((user) => user.id);
 
-  const suggestedConnections = filteredLoggedInUser.filter(
+  const suggestedConnections = filteredCurUser.filter(
     (user) => !mergedList?.includes(user.id)
   );
 

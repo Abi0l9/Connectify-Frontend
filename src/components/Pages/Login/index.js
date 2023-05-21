@@ -2,24 +2,21 @@ import { Box } from "@mui/material";
 import LoginForm from "./LoginForm";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
-const Login = ({ setData, user }) => {
+const Login = () => {
   const navigate = useNavigate();
+  const loggedInUser = useSelector((state) => state.curUser);
 
   useEffect(() => {
-    const data = JSON.parse(localStorage.getItem("userData"));
-    setData(data);
-  });
-
-  useEffect(() => {
-    if (user) {
+    if (loggedInUser) {
       navigate("/feed");
     }
   });
 
   return (
     <Box>
-      <LoginForm setData={setData} />
+      <LoginForm />
     </Box>
   );
 };

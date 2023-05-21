@@ -11,34 +11,41 @@ import {
   MADE_FRIEND_REQUEST,
   USER_UPDATED,
 } from "./Queries/userQueries";
-import { useState } from "react";
-import { useMatch } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useMatch, useNavigate } from "react-router-dom";
 import { updateCache } from "./handlers";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { getAllFriends } from "./reducers/friendsReducer";
 import { getUsers } from "./reducers/usersReducer";
+import { getCurUser } from "./reducers/loggedInUserReducer";
 
 function App() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  const [allUsers, setAllUsers] = useState([]);
-  const [friends, setFriends] = useState([]);
+  const allUsers = useSelector((store) => store.users);
 
   const match = useMatch("/profile/:desired_name");
   const selected = match
     ? allUsers?.find((user) => user.desired_name === match.params.desired_name)
     : null;
 
+  useEffect(() => {
+    const details = JSON.parse(localStorage.getItem("userData"));
+
+    if (details) {
+      dispatch(getCurUser(details));
+    }
+  }, [dispatch]);
+
   useQuery(GET_VERIFIED_USERS, {
     onCompleted: (data) => {
-      setAllUsers(data.getVerifiedUsers);
       dispatch(getUsers(data.getVerifiedUsers));
     },
   });
 
   useQuery(GET_FRIENDS, {
     onCompleted: ({ getFriends }) => {
-      setFriends(getFriends);
       console.log(getFriends);
       dispatch(getAllFriends(getFriends));
     },
@@ -86,9 +93,14 @@ function App() {
     },
   });
 
+  const logout = () => {
+    localStorage.clear();
+    navigate("/login");
+  };
+
   return (
     <Box>
-      <Layout allUsers={allUsers} selected={selected} friends={friends} />
+      <Layout logout={logout} selected={selected} />
     </Box>
   );
 }
