@@ -1,4 +1,4 @@
-import { Box, Container, Stack, Typography, Button } from "@mui/material";
+import { Box, Container, Stack, Button } from "@mui/material";
 import { useSelector } from "react-redux";
 import PendingRequests from "./PendingRequests";
 import AcceptedRequests from "./AcceptedRequests";

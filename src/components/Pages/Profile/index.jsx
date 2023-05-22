@@ -11,21 +11,27 @@ import {
   Typography,
 } from "@mui/material";
 import { deepOrange } from "@mui/material/colors";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import UpdateProfile from "./UpdateProfile";
 import { useMutation, useQuery } from "@apollo/client";
 import { GET_USER, MAKE_FRIEND_REQUEST } from "../../../Queries/userQueries";
 import Loading from "../../../Reusables/Loading";
 import { useDispatch, useSelector } from "react-redux";
 import { notification } from "../../../reducers/notificationReducer";
+import useConnectList from "../../../hooks/useConnectList";
 
 function Profile({ user }) {
   const dispatch = useDispatch();
+  const { accepted } = useConnectList();
   const curUser = useSelector((state) => state.curUser);
-
   const [userToUpdate, setUserToUpdate] = useState({});
-
   const [open, setOpen] = useState(false);
+
+  const [tab, setTab] = useState("friends");
+  const tabsRef = useRef(null);
+
+  console.log(accepted);
+
   const [makeRequest, requestResult] = useMutation(MAKE_FRIEND_REQUEST, {
     onCompleted: () => {
       dispatch(notification("Request sent", 3000));
@@ -80,6 +86,25 @@ function Profile({ user }) {
     userDetails &&
     Object.entries(userDetails).filter(([k]) => neededData.includes(k));
 
+  // if (tab === "friends") {
+  //   tabsRef.current = (
+  //     <Box>
+  //       <AcceptedRequests accepted={accepted} />
+  //     </Box>
+  //   );
+  // } else if (tab === "requests") {
+  //   tabsRef.current = (
+  //     <Box>
+  //       <ReceivedRequests requests={requests} />
+  //     </Box>
+  //   );
+  // }
+
+  const handleTabsClick = (tabName, e) => {
+    console.log(e?.target?.textContent);
+    setTab(tabName);
+  };
+
   return (
     <Container component="main">
       <Box>
@@ -127,6 +152,17 @@ function Profile({ user }) {
             </Stack>
           </Box>
         )}
+      </Box>
+      <Divider />
+      <Box sx={{ fontWeight: "bold", mx: "auto", my: 1 }}>
+        <Stack direction="row" spacing={3} alignItems="center">
+          <Box onClick={(e) => handleTabsClick("about", e)}>
+            <Button size="small">About</Button>
+          </Box>
+          <Box onClick={(e) => handleTabsClick("friends", e)}>
+            <Button size="small">Friends</Button>
+          </Box>
+        </Stack>
       </Box>
       <Divider />
       <Box sx={{ width: "500px", margin: "10px auto" }}>
