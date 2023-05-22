@@ -38,7 +38,10 @@ function AppRoutes({ selected }) {
           element={!loggedInUser?.userId ? <Login /> : <Messages />}
         />
         <Route path="/sign-up" element={<SignUp />} />
-        <Route path="/login" element={<Login />} />
+        <Route
+          path="/login"
+          element={!loggedInUser?.userId ? <Login /> : <Feed />}
+        />
       </Routes>
     </Box>
   );

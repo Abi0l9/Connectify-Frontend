@@ -4,8 +4,14 @@ import ListTemplate from "./ListTempate";
 const SuggestedConnects = ({ suggestions }) => {
   return (
     <Box sx={{ maxWidth: "350px" }}>
-      <Typography>You can connect with these people</Typography>
-      <ListTemplate list={suggestions} type="suggestions" />
+      {suggestions.length ? (
+        <Box>
+          <Typography>You can connect with these people</Typography>
+          <ListTemplate list={suggestions} type="suggestions" />
+        </Box>
+      ) : (
+        <Typography>No one, here, at the moment...</Typography>
+      )}
     </Box>
   );
 };

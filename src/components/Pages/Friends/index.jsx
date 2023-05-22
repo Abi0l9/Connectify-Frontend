@@ -1,13 +1,16 @@
-import { Box, Container } from "@mui/material";
+import { Box, Container, Stack, Typography, Button } from "@mui/material";
 import { useSelector } from "react-redux";
 import PendingRequests from "./PendingRequests";
 import AcceptedRequests from "./AcceptedRequests";
 import ReceivedRequests from "./ReceivedRequests";
 import SuggestedConnects from "./SuggestedConnects";
+import { useRef, useState } from "react";
 
 function FriendsPage() {
   const allUsers = useSelector((store) => store.users);
   const curUser = useSelector((state) => state.curUser);
+  const [tab, setTab] = useState("friends");
+  const tabsRef = useRef(null);
 
   const filteredCurUser = allUsers.filter((user) => user.id !== curUser.userId);
 
@@ -30,24 +33,56 @@ function FriendsPage() {
     (user) => !mergedList?.includes(user.id)
   );
 
-  return (
-    <Container component="main">
-      <Box>
-        <ReceivedRequests requests={requests} />
-      </Box>
+  if (tab === "friends") {
+    tabsRef.current = (
       <Box>
         <AcceptedRequests accepted={accepted} />
       </Box>
+    );
+  } else if (tab === "requests") {
+    tabsRef.current = (
+      <Box>
+        <ReceivedRequests requests={requests} />
+      </Box>
+    );
+  } else if (tab === "pendings") {
+    tabsRef.current = (
       <Box>
         <PendingRequests pendings={pendings} />
       </Box>
+    );
+  } else if (tab === "suggestions") {
+    tabsRef.current = (
       <Box>
         <SuggestedConnects suggestions={suggestedConnections} />
       </Box>
-      {/* <Box>
-        <AllUsers allUsers={suggestedConnections} />
-      </Box> */}
-      ;
+    );
+  }
+
+  const handleTabsClick = (tabName, e) => {
+    console.log(e?.target?.textContent);
+    setTab(tabName);
+  };
+
+  return (
+    <Container component="main">
+      <Box sx={{ fontWeight: "bold", mx: 1 }}>
+        <Stack direction="row" spacing={3}>
+          <Box onClick={(e) => handleTabsClick("friends", e)}>
+            <Button size="small">Friends</Button>
+          </Box>
+          <Box onClick={(e) => handleTabsClick("requests", e)}>
+            <Button size="small">Connect Requests</Button>
+          </Box>
+          <Box onClick={() => handleTabsClick("pendings")}>
+            <Button size="small">Sent Requests</Button>
+          </Box>
+          <Box onClick={() => handleTabsClick("suggestions")}>
+            <Button size="small">Suggested Connects</Button>
+          </Box>
+        </Stack>
+      </Box>
+      <Box ref={tabsRef}>{tabsRef.current}</Box>
     </Container>
   );
 }

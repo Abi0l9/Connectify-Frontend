@@ -4,7 +4,6 @@ import { useSelector } from "react-redux";
 
 function Header({ logout }) {
   const loggedInUser = useSelector((state) => state.curUser);
-  console.log(loggedInUser);
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
