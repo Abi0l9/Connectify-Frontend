@@ -188,6 +188,15 @@ export const DECLINE_FRIEND_REQUEST = gql`
   ${USER_DETAILS}
 `;
 
+export const SEND_MSG = gql`
+  mutation sendMsg($receiver: String!, $content: String!) {
+    sendMsg(receiver: $receiver, content: $content) {
+      ...UserDetails
+    }
+  }
+  ${USER_DETAILS}
+`;
+
 //QUERIES
 export const GET_VERIFIED_USERS = gql`
   query {
@@ -256,6 +265,15 @@ export const CANCELLED_FRIEND_REQUEST = gql`
 export const DECLINED_FRIEND_REQUEST = gql`
   subscription {
     declinedFriendRequest {
+      ...UserDetails
+    }
+  }
+  ${USER_DETAILS}
+`;
+
+export const SENT_MSG = gql`
+  subscription {
+    sentMsg {
       ...UserDetails
     }
   }

@@ -11,26 +11,28 @@ import {
   Typography,
 } from "@mui/material";
 import { deepOrange } from "@mui/material/colors";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import UpdateProfile from "./UpdateProfile";
 import { useMutation, useQuery } from "@apollo/client";
-import { GET_USER, MAKE_FRIEND_REQUEST } from "../../../Queries/userQueries";
+import {
+  /*GET_USER,*/ MAKE_FRIEND_REQUEST,
+} from "../../../Queries/userQueries";
 import Loading from "../../../Reusables/Loading";
 import { useDispatch, useSelector } from "react-redux";
 import { notification } from "../../../reducers/notificationReducer";
 import useConnectList from "../../../hooks/useConnectList";
+import AcceptedRequests from "../Friends/AcceptedRequests";
 
 function Profile({ user }) {
   const dispatch = useDispatch();
-  const { accepted } = useConnectList();
+
+  const { accepted } = useConnectList(user);
   const curUser = useSelector((state) => state.curUser);
   const [userToUpdate, setUserToUpdate] = useState({});
   const [open, setOpen] = useState(false);
+  const allUsers = useSelector((state) => state.users);
 
-  const [tab, setTab] = useState("friends");
-  const tabsRef = useRef(null);
-
-  console.log(accepted);
+  const [tab, setTab] = useState("about");
 
   const [makeRequest, requestResult] = useMutation(MAKE_FRIEND_REQUEST, {
     onCompleted: () => {
@@ -55,15 +57,18 @@ function Profile({ user }) {
     setOpen(false);
   };
 
-  const result = useQuery(GET_USER, {
-    variables: { getOneUserId: userToUpdate.id },
-  });
+  // const result = useQuery(GET_USER, {
+  //   variables: { getOneUserId: userToUpdate.id },
+  // });
 
-  if (result.loading) {
+  const profileOwner = allUsers.find((user) => user.id === userToUpdate?.id);
+
+  if (!profileOwner) {
     return <Loading />;
   }
 
-  const userDetails = result?.data?.getOneUser;
+  // const userDetails = result?.data?.getOneUser;
+  const userDetails = profileOwner;
 
   //handler for sending connect requests
   const handleConnect = () => {
@@ -86,22 +91,7 @@ function Profile({ user }) {
     userDetails &&
     Object.entries(userDetails).filter(([k]) => neededData.includes(k));
 
-  // if (tab === "friends") {
-  //   tabsRef.current = (
-  //     <Box>
-  //       <AcceptedRequests accepted={accepted} />
-  //     </Box>
-  //   );
-  // } else if (tab === "requests") {
-  //   tabsRef.current = (
-  //     <Box>
-  //       <ReceivedRequests requests={requests} />
-  //     </Box>
-  //   );
-  // }
-
-  const handleTabsClick = (tabName, e) => {
-    console.log(e?.target?.textContent);
+  const handleTabsClick = (tabName) => {
     setTab(tabName);
   };
 
@@ -156,31 +146,38 @@ function Profile({ user }) {
       <Divider />
       <Box sx={{ fontWeight: "bold", mx: "auto", my: 1 }}>
         <Stack direction="row" spacing={3} alignItems="center">
-          <Box onClick={(e) => handleTabsClick("about", e)}>
+          <Box onClick={(e) => handleTabsClick("about")}>
             <Button size="small">About</Button>
           </Box>
-          <Box onClick={(e) => handleTabsClick("friends", e)}>
+          <Box onClick={(e) => handleTabsClick("friends")}>
             <Button size="small">Friends</Button>
           </Box>
         </Stack>
       </Box>
       <Divider />
-      <Box sx={{ width: "500px", margin: "10px auto" }}>
-        <Box>
-          {finalData?.map(([k, v]) => (
-            <Box key={k} sx={{ display: "flex" }}>
-              <Box sx={{ width: "200px" }}>
-                <Typography variant="body2">
-                  {k.charAt(0).toUpperCase() + k.substr(1).toLowerCase()}:
-                </Typography>
+      {tab === "about" && (
+        <Box sx={{ width: "500px", margin: "10px auto" }}>
+          <Box>
+            {finalData?.map(([k, v]) => (
+              <Box key={k} sx={{ display: "flex" }}>
+                <Box sx={{ width: "200px" }}>
+                  <Typography variant="body2">
+                    {k.charAt(0).toUpperCase() + k.substr(1).toLowerCase()}:
+                  </Typography>
+                </Box>
+                <Box sx={{ textAlign: "left" }}>
+                  <Typography fontWeight="bold">{v}</Typography>
+                </Box>
               </Box>
-              <Box sx={{ textAlign: "left" }}>
-                <Typography fontWeight="bold">{v}</Typography>
-              </Box>
-            </Box>
-          ))}
+            ))}
+          </Box>
         </Box>
-      </Box>
+      )}
+      {tab === "friends" && (
+        <Box>
+          <AcceptedRequests accepted={accepted} />
+        </Box>
+      )}
       <Dialog open={open} onClose={closeModal}>
         {userDetails && (
           <Box sx={{ my: 2 }}>

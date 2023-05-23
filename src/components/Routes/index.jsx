@@ -7,6 +7,7 @@ import Messages from "../Pages/Messages";
 import SignUp from "../Pages/Signup";
 import Login from "../Pages/Login";
 import { useSelector } from "react-redux";
+import Inbox from "../Pages/Messages/Inbox";
 
 function AppRoutes({ selected }) {
   const loggedInUser = useSelector((state) => state.curUser);
@@ -16,7 +17,7 @@ function AppRoutes({ selected }) {
       <Routes>
         <Route path="/sign-up" element={<SignUp />} />
         <Route
-          path="/profile/:id"
+          path="/profile/:name"
           element={
             !loggedInUser?.userId ? <Login /> : <Profile user={selected} />
           }
@@ -36,6 +37,10 @@ function AppRoutes({ selected }) {
         <Route
           path="/messages"
           element={!loggedInUser?.userId ? <Login /> : <Messages />}
+        />
+        <Route
+          path="/inbox"
+          element={!loggedInUser?.userId ? <Login /> : <Inbox />}
         />
         <Route path="/sign-up" element={<SignUp />} />
         <Route

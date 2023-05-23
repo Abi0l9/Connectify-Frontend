@@ -22,7 +22,6 @@ import {
 } from "../../../Queries/userQueries";
 import { useDispatch } from "react-redux";
 import { notification } from "../../../reducers/notificationReducer";
-import SuggestedConnects from "./SuggestedConnects";
 
 const ConnectRequestsIcons = ({ acceptFn, declinelFn }) => {
   return (
@@ -155,7 +154,7 @@ const ListTemplate = ({ list, type }) => {
             <ListItemAvatar>
               <Avatar sx={{ bgcolor: deepOrange[500] }}></Avatar>
             </ListItemAvatar>
-            <Link href={`profile/${user.desired_name}`} underline="none">
+            <Link href={`/profile/${user.name}`} underline="none">
               <ListItemText primary={user.name} />
             </Link>
           </ListItem>

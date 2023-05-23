@@ -9,6 +9,7 @@ import {
   GET_FRIENDS,
   GET_VERIFIED_USERS,
   MADE_FRIEND_REQUEST,
+  SENT_MSG,
   USER_UPDATED,
 } from "./Queries/userQueries";
 import { useEffect, useState } from "react";
@@ -27,9 +28,9 @@ function App() {
 
   const allUsers = useSelector((store) => store.users);
 
-  const match = useMatch("/profile/:desired_name");
+  const match = useMatch("/profile/:name");
   const selected = match
-    ? allUsers?.find((user) => user.desired_name === match.params.desired_name)
+    ? allUsers?.find((user) => user.name === match.params.name)
     : null;
 
   useEffect(() => {
@@ -90,6 +91,15 @@ function App() {
   useSubscription(USER_UPDATED, {
     onData: ({ data, client }) => {
       const updatedUser = data.data.userUpdated;
+      console.log(data);
+
+      updateCache(client.cache, { query: GET_VERIFIED_USERS }, updatedUser);
+    },
+  });
+
+  useSubscription(SENT_MSG, {
+    onData: ({ data, client }) => {
+      const updatedUser = data.data.sentMsg;
       console.log(data);
 
       updateCache(client.cache, { query: GET_VERIFIED_USERS }, updatedUser);

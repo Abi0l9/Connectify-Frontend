@@ -47,14 +47,14 @@ const UserMenu = ({ logout }) => {
     {
       name: "Profile",
       avatar: <Person />,
-      action: () => navigate(`/profile/${userDetails?.desired_name}`),
+      action: () => navigate(`/profile/${userDetails?.name}`),
     },
     {
       name: "Friends",
       avatar: <VerifiedUserSharp />,
       action: () => navigate("/friends"),
     },
-    { name: "Inbox", avatar: <Inbox />, action: () => null },
+    { name: "Inbox", avatar: <Inbox />, action: () => navigate("/messages") },
     { name: "Account", avatar: <Settings />, action: () => null },
     { name: "Logout", avatar: <Logout />, action: logout },
   ];
@@ -65,7 +65,7 @@ const UserMenu = ({ logout }) => {
         <Link
           color="inherit"
           underline="none"
-          href={`/profile/${userDetails?.desired_name}`}
+          href={`/profile/${userDetails?.name}`}
         >
           {userDetails?.name}
         </Link>
