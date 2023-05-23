@@ -19,17 +19,17 @@ const Inbox = ({ receiver }) => {
 
   const handleSendMsg = (e) => {
     e.preventDefault();
-    console.log(receiver, content);
-    // sendMsg();
+    sendMsg();
+    setContent("");
+    console.log("sending messages...");
   };
 
   return (
     <Box>
       <Box sx={{ height: "80vh" }}>
-        <Box
-          onSubmit={(e) => handleSendMsg(e)}
-          component="form"
-          sx={{
+        <form
+          onSubmit={handleSendMsg}
+          style={{
             margin: "0 auto",
             bottom: 0,
             left: 0,
@@ -54,7 +54,7 @@ const Inbox = ({ receiver }) => {
               ),
             }}
           />
-        </Box>
+        </form>
       </Box>
     </Box>
   );

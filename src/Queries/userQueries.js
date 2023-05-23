@@ -11,6 +11,26 @@ const USER_DETAILS = gql`
     country
     continent
     image
+    messages {
+      id
+      sender {
+        id
+        name
+      }
+      receiver {
+        id
+        name
+      }
+      inbox {
+        id
+        sender {
+          id
+          name
+        }
+        content
+        time
+      }
+    }
     friends {
       requests {
         id
