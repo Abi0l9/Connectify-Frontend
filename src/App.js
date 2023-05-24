@@ -45,7 +45,6 @@ function App() {
   useQuery(GET_VERIFIED_USERS, {
     onCompleted: (data) => {
       dispatch(getUsers(data.getVerifiedUsers));
-      console.log(data.getVerifiedUsers)
     },
   });
 

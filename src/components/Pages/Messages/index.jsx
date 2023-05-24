@@ -19,7 +19,6 @@ import Inbox from "./Inbox";
 
 function Messages() {
   const { accepted } = useConnectList();
-  console.log(accepted);
   const [tab, setTab] = useState("chats");
   const [receiver, setReceiver] = useState("");
 
