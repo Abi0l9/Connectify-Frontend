@@ -32,7 +32,7 @@ function Messages() {
   };
 
   return (
-    <Container component="main">
+    <Box>
       <Box>
         <Stack
           direction={"row"}
@@ -76,7 +76,7 @@ function Messages() {
       </Box>
       <Box id="chats">{tab === "chats" && <Box>chats here</Box>}</Box>
       <Box>{tab === "inbox" && <Inbox receiver={receiver} />}</Box>
-    </Container>
+    </Box>
   );
 }
 

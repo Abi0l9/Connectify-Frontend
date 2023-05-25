@@ -7,7 +7,6 @@ function Footer() {
       <Box
         sx={{
           width: "100%",
-          height: "400px",
         }}
       >
         Footer

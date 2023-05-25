@@ -2,14 +2,15 @@ import { Box, Button, InputAdornment, TextField } from "@mui/material";
 import { ArrowForwardIosRounded } from "@mui/icons-material";
 import { useState } from "react";
 import { useMutation } from "@apollo/client";
-import { SEND_MSG } from "../../../../Queries/userQueries";
+import { GET_VERIFIED_USERS, SEND_MSG } from "../../../../Queries/userQueries";
 import { useSelector } from "react-redux";
 import styled from "@emotion/styled";
+import { updateCache } from "../../../../handlers";
 
 const SenderBox = styled(Box)({
-  color: "skyblue",
+  color: "whitesmoke",
   fontFamily: "cursive",
-  backgroundColor: "whitesmoke",
+  backgroundColor: "skyblue",
   width: "40%",
   padding: ".8rem .4rem",
   margin: ".2rem",
@@ -53,7 +54,31 @@ const Inbox = ({ receiver }) => {
       setContent("");
     },
     onError: (e) => {
-      console.log(e.message);
+      console.log(e);
+    },
+    update: (cache, response) => {
+      console.log(response);
+      updateCache(cache, { query: GET_VERIFIED_USERS }, response.data.sendMsg);
+
+      // updateCache(
+      //   cache,
+      //   { query: GET_VERIFIED_USERS },
+      //   response.data?.receiverHasMsgHistory
+      // );
+
+      // updateCache(
+      //   cache,
+      //   { query: GET_VERIFIED_USERS },
+      //   response.data?.firstMsgToReceiver
+      // );
+
+      // updateCache(
+      //   cache,
+      //   { query: GET_VERIFIED_USERS },
+      //   response.data?.senderHasMsgHistory
+      // );
+
+      console.log(response.data);
     },
   });
 
@@ -67,9 +92,16 @@ const Inbox = ({ receiver }) => {
   return (
     <Box>
       <Box sx={{ height: "80vh" }}>
-        <Box sx={{ height: "70vh", overflowY: "scroll", overflowX: "hidden" }}>
+        <Box
+          sx={{
+            height: "70vh",
+            overflowY: "scroll",
+            overflowX: "hidden",
+            width: "100%",
+          }}
+        >
           {myInbox?.map(({ id, sender, content, time }) => (
-            <Box>
+            <Box key={id}>
               {sender.id === curUser.userId ? (
                 <SenderBox key={id}>{content}</SenderBox>
               ) : (
