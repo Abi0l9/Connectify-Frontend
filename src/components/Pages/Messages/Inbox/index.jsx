@@ -1,84 +1,81 @@
-import { Box, Button, InputAdornment, TextField } from "@mui/material";
+import {
+  Box,
+  Button,
+  InputAdornment,
+  Link,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { ArrowForwardIosRounded } from "@mui/icons-material";
 import { useState } from "react";
-import { useMutation } from "@apollo/client";
-import { GET_VERIFIED_USERS, SEND_MSG } from "../../../../Queries/userQueries";
-import { useSelector } from "react-redux";
+import { useMutation, useQuery } from "@apollo/client";
+import {
+  GET_USER,
+  GET_VERIFIED_USERS,
+  SEND_MSG,
+} from "../../../../Queries/userQueries";
+import { useDispatch, useSelector } from "react-redux";
 import styled from "@emotion/styled";
 import { updateCache } from "../../../../handlers";
+import { notification } from "../../../../reducers/notificationReducer";
 
 const SenderBox = styled(Box)({
   color: "whitesmoke",
-  fontFamily: "cursive",
-  backgroundColor: "skyblue",
-  width: "40%",
-  padding: ".8rem .4rem",
-  margin: ".2rem",
+  fontFamily: "sans-serif",
+  backgroundColor: "darkblue",
+  width: "60%",
+  padding: ".4rem",
+  margin: ".3rem",
   position: "relative",
+  fontWeight: "bold",
   right: 0,
-  left: "60%",
+  left: "40%",
   borderRadius: ".8rem 0 .8rem 0",
+});
+
+const TimeHolder = styled(Box)({
+  color: "lightgrey",
+  fontFamily: "arial",
+  fontSize: ".6rem",
+  padding: ".2rem",
+  paddingLeft: "-0.1rem",
+  margin: "-0.2rem",
+  marginBottom: ".2rem",
+  position: "relative",
+  top: 0,
+  width: "100%",
 });
 
 const ReceiverBox = styled(Box)({
   color: "white",
-  fontFamily: "cursive",
+  fontFamily: "sans-serif",
+  fontWeight: "bold",
   backgroundColor: "purple",
-  width: "40%",
-  padding: ".8rem .4rem",
-  margin: ".2rem",
+  width: "60%",
+  padding: ".4rem",
+  margin: ".3rem",
   position: "relative",
   left: 0,
-  right: "60%",
+  right: "40%",
   borderRadius: "0 .8rem 0 .8rem",
 });
 
-const Inbox = ({ receiver }) => {
+const Inbox = ({ receiver, myInbox }) => {
   const [content, setContent] = useState();
+  const dispatch = useDispatch();
   const curUser = useSelector((store) => store.curUser);
-  const allUsers = useSelector((state) => state.users);
-
-  const senderProfile = allUsers.find((user) => user.id === curUser.userId);
-  const convo = senderProfile.messages.find(
-    (msg) =>
-      (msg.sender.id === curUser.userId && msg.receiver.id === receiver) ||
-      (msg.sender.id === receiver && msg.receiver.id === curUser.userId)
-  );
-
-  const myInbox = convo?.inbox;
 
   const [sendMsg] = useMutation(SEND_MSG, {
     variables: { receiver, content },
     onCompleted: (data) => {
-      console.log(data);
       setContent("");
     },
     onError: (e) => {
-      console.log(e);
+      console.log(e.message);
+      dispatch(notification("an error occured...", 3000));
     },
     update: (cache, response) => {
-      console.log(response);
       updateCache(cache, { query: GET_VERIFIED_USERS }, response.data.sendMsg);
-
-      // updateCache(
-      //   cache,
-      //   { query: GET_VERIFIED_USERS },
-      //   response.data?.receiverHasMsgHistory
-      // );
-
-      // updateCache(
-      //   cache,
-      //   { query: GET_VERIFIED_USERS },
-      //   response.data?.firstMsgToReceiver
-      // );
-
-      // updateCache(
-      //   cache,
-      //   { query: GET_VERIFIED_USERS },
-      //   response.data?.senderHasMsgHistory
-      // );
-
-      console.log(response.data);
     },
   });
 
@@ -89,9 +86,38 @@ const Inbox = ({ receiver }) => {
     console.log("sending messages...");
   };
 
+  const timeSplitter = (time) => {
+    if (time) {
+      const convertedTime = time.toLocaleString();
+      const newTime = convertedTime.split(" ")[4];
+      const date = convertedTime.split(" ").slice(0, 4).join(" ");
+      return `${newTime} - ${date}`;
+    }
+  };
+
+  const getUser = useQuery(GET_USER, {
+    variables: { getOneUserId: receiver },
+  });
+
+  const receiverInfo = getUser?.data?.getOneUser;
+
   return (
     <Box>
       <Box sx={{ height: "80vh" }}>
+        <Box sx={{ textAlign: "center" }}>
+          <Typography variant="h6">
+            Chatting with{" "}
+            {(
+              <Link
+                color="green"
+                underline="hover"
+                href={`/profile/${receiverInfo?.name}`}
+              >
+                {receiverInfo?.name}
+              </Link>
+            ) || "User"}
+          </Typography>
+        </Box>
         <Box
           sx={{
             height: "70vh",
@@ -103,12 +129,18 @@ const Inbox = ({ receiver }) => {
           {myInbox?.map(({ id, sender, content, time }) => (
             <Box key={id}>
               {sender.id === curUser.userId ? (
-                <SenderBox key={id}>{content}</SenderBox>
+                <SenderBox key={id}>
+                  <TimeHolder>{timeSplitter(time)}</TimeHolder>
+                  {content}
+                </SenderBox>
               ) : (
-                <ReceiverBox key={id}>{content}</ReceiverBox>
+                <ReceiverBox key={id}>
+                  <TimeHolder>{timeSplitter(time)}</TimeHolder>
+                  {content}
+                </ReceiverBox>
               )}
             </Box>
-          )) || "Start a conversation with..."}
+          )) || "Start a conversation with " + `${receiverInfo?.name}`}
         </Box>
         <Box>
           <form

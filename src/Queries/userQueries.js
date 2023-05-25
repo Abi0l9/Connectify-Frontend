@@ -299,3 +299,39 @@ export const SENT_MSG = gql`
   }
   ${USER_DETAILS}
 `;
+
+export const FIRST_MSG_BY_SENDER = gql`
+  subscription {
+    sentMsg {
+      ...UserDetails
+    }
+  }
+  ${USER_DETAILS}
+`;
+
+export const FIRST_MSG_TO_RECEIVER = gql`
+  subscription {
+    sentMsg {
+      ...UserDetails
+    }
+  }
+  ${USER_DETAILS}
+`;
+
+export const SENDER_HAS_MSG_HISTORY = gql`
+  subscription {
+    sentMsg {
+      ...UserDetails
+    }
+  }
+  ${USER_DETAILS}
+`;
+
+export const RECEIVER_HAS_MSG_HISTORY = gql`
+  subscription {
+    sentMsg {
+      ...UserDetails
+    }
+  }
+  ${USER_DETAILS}
+`;

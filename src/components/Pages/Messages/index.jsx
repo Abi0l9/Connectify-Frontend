@@ -16,11 +16,27 @@ import React, { useState } from "react";
 import useConnectList from "../../../hooks/useConnectList";
 import { deepOrange } from "@mui/material/colors";
 import Inbox from "./Inbox";
+import { useSelector } from "react-redux";
+import Chats from "./Chats";
 
 function Messages() {
   const { accepted } = useConnectList();
   const [tab, setTab] = useState("chats");
   const [receiver, setReceiver] = useState("");
+
+  const curUser = useSelector((store) => store.curUser);
+  const allUsers = useSelector((state) => state.users);
+
+  const senderProfile = allUsers.find((user) => user.id === curUser.userId);
+  const convo = senderProfile.messages.find(
+    (msg) =>
+      (msg.sender.id === curUser.userId && msg.receiver.id === receiver) ||
+      (msg.sender.id === receiver && msg.receiver.id === curUser.userId)
+  );
+
+  const myInbox = convo?.inbox;
+
+  const myChats = senderProfile.messages.map((ibx) => ibx?.receiver);
 
   const handleTab = (tabName) => {
     setTab(tabName);
@@ -74,10 +90,19 @@ function Messages() {
             </List>
           ))}
       </Box>
-      <Box id="chats">{tab === "chats" && <Box>chats here</Box>}</Box>
-      <Box>{tab === "inbox" && <Inbox receiver={receiver} />}</Box>
+      <Box id="chats">
+        {tab === "chats" && (
+          <Box>
+            <Chats receivers={myChats} getSenderId={getSenderId} />
+          </Box>
+        )}
+      </Box>
+      <Box>
+        {tab === "inbox" && <Inbox receiver={receiver} myInbox={myInbox} />}
+      </Box>
     </Box>
   );
 }
 
 export default Messages;
+// {myChats?.map((receiver) => receiver.name)}
