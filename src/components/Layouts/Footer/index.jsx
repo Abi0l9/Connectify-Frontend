@@ -16,7 +16,8 @@ function Footer() {
       >
         <Box
           sx={{
-            fontFamily: "cursive",
+            fontFamily: "sans-serif",
+            fontWeight: "bold",
             padding: ".5rem",
             my: 2,
           }}

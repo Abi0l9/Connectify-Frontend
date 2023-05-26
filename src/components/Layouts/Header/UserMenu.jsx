@@ -2,6 +2,7 @@ import {
   ArrowDropDown,
   Inbox,
   Logout,
+  MessageRounded,
   Notifications,
   Person,
   Settings,
@@ -15,6 +16,7 @@ import {
   Menu,
   Badge,
   Link,
+  Stack,
 } from "@mui/material";
 import { deepOrange } from "@mui/material/colors";
 import { useState } from "react";
@@ -61,21 +63,37 @@ const UserMenu = ({ logout }) => {
 
   return (
     <Box sx={{ display: "flex", mx: 1, alignItems: "center" }}>
-      <Typography variant="body1" fontWeight="bold">
-        <Link
-          color="inherit"
-          underline="none"
-          href={`/profile/${userDetails?.name}`}
-        >
-          {userDetails?.name}
-        </Link>
-      </Typography>
-      <Avatar sx={{ bgcolor: deepOrange[500], mx: 1 }}>
-        {userDetails?.name?.split(" ")[0][0]}
-      </Avatar>
-      <Badge color="secondary" badgeContent={3} max={99}>
-        <Notifications color="white" />
-      </Badge>
+      <Box
+        sx={{
+          mx: 1,
+          display: {
+            xs: "none",
+            sm: "block",
+          },
+        }}
+      >
+        <Stack alignItems="center">
+          <Avatar sx={{ bgcolor: deepOrange[500], width: 24, height: 24 }}>
+            {userDetails?.name?.split(" ")[0][0]}
+          </Avatar>
+          <Typography variant="body1" fontWeight="bold">
+            <Link
+              color="inherit"
+              underline="none"
+              href={`/profile/${userDetails?.name}`}
+            >
+              {userDetails?.name}
+            </Link>
+          </Typography>
+        </Stack>
+      </Box>
+      <Stack direction="row" spacing={2}>
+        <Badge color="secondary" badgeContent={3} max={99}>
+          <Notifications color="white" />
+        </Badge>
+        <MessageRounded onClick={() => navigate("/messages")} />
+      </Stack>
+
       <Box sx={style}>
         <Menu
           open={open}

@@ -7,7 +7,6 @@ import Messages from "../Pages/Messages";
 import SignUp from "../Pages/Signup";
 import Login from "../Pages/Login";
 import { useSelector } from "react-redux";
-import Inbox from "../Pages/Messages/Inbox";
 
 function AppRoutes({ selected }) {
   const loggedInUser = useSelector((state) => state.curUser);

@@ -8,9 +8,13 @@ function Header({ logout }) {
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
         <Toolbar>
-          <Box sx={{ flexGrow: 1 }}>
+          <Box
+            sx={{
+              flexGrow: 1,
+            }}
+          >
             <Link href="/" color="inherit" underline="none">
-              <Typography variant="h4">Connectify</Typography>
+              <Typography variant="h6">Connectify</Typography>
             </Link>
           </Box>
           {!loggedInUser?.userId ? (

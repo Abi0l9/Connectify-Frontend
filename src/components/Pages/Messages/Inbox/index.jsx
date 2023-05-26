@@ -102,8 +102,8 @@ const Inbox = ({ receiver, myInbox }) => {
   const receiverInfo = getUser?.data?.getOneUser;
 
   return (
-    <Box>
-      <Box sx={{ height: "80vh" }}>
+    <Box sx={{ maxWidth: "xs", maxHeight: "1800px" }}>
+      <Box sx={{ height: "75vh" }}>
         <Box sx={{ textAlign: "center" }}>
           <Typography variant="h6">
             Chatting with{" "}
@@ -120,7 +120,7 @@ const Inbox = ({ receiver, myInbox }) => {
         </Box>
         <Box
           sx={{
-            height: "80vh",
+            height: "75vh",
             overflowY: "scroll",
             overflowX: "hidden",
             width: "100%",
@@ -147,7 +147,7 @@ const Inbox = ({ receiver, myInbox }) => {
             onSubmit={handleSendMsg}
             style={{
               margin: ".2rem auto",
-              bottom: 0,
+              bottom: 20,
               left: 0,
               right: 0,
               position: "static",

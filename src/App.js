@@ -43,6 +43,7 @@ function App() {
   }, [dispatch]);
 
   useQuery(GET_VERIFIED_USERS, {
+    pollInterval: 3000,
     onCompleted: (data) => {
       dispatch(getUsers(data.getVerifiedUsers));
     },
@@ -50,7 +51,6 @@ function App() {
 
   useQuery(GET_FRIENDS, {
     onCompleted: ({ getFriends }) => {
-      console.log(getFriends);
       dispatch(getAllFriends(getFriends));
     },
   });

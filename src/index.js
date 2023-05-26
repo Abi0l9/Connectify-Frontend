@@ -29,8 +29,7 @@ const authLink = setContext((_, { headers }) => {
 });
 
 const httpLink = new HttpLink({
-  uri: "",
-  // uri: "http://localhost:4000",
+  uri: "http://localhost:4000",
 });
 
 const wsLink = new GraphQLWsLink(createClient({ url: "ws://localhost:4000" }));

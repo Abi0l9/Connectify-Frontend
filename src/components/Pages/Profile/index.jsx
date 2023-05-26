@@ -13,7 +13,7 @@ import {
 import { deepOrange } from "@mui/material/colors";
 import React, { useEffect, useState } from "react";
 import UpdateProfile from "./UpdateProfile";
-import { useMutation, useQuery } from "@apollo/client";
+import { useMutation } from "@apollo/client";
 import {
   /*GET_USER,*/ MAKE_FRIEND_REQUEST,
 } from "../../../Queries/userQueries";
@@ -22,9 +22,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { notification } from "../../../reducers/notificationReducer";
 import useConnectList from "../../../hooks/useConnectList";
 import AcceptedRequests from "../Friends/AcceptedRequests";
+import { useNavigate } from "react-router-dom";
 
 function Profile({ user }) {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const { accepted } = useConnectList(user);
   const curUser = useSelector((state) => state.curUser);
@@ -57,17 +59,12 @@ function Profile({ user }) {
     setOpen(false);
   };
 
-  // const result = useQuery(GET_USER, {
-  //   variables: { getOneUserId: userToUpdate.id },
-  // });
-
   const profileOwner = allUsers.find((user) => user.id === userToUpdate?.id);
 
   if (!profileOwner) {
     return <Loading />;
   }
 
-  // const userDetails = result?.data?.getOneUser;
   const userDetails = profileOwner;
 
   //handler for sending connect requests
@@ -138,7 +135,7 @@ function Profile({ user }) {
           <Box sx={{ width: "100px", margin: "4px auto" }}>
             <Stack spacing={3} direction="row">
               <Button onClick={handleConnect}>Connect</Button>
-              <Button>Message</Button>
+              <Button onClick={() => navigate("/messages")}>Message</Button>
             </Stack>
           </Box>
         )}
@@ -156,7 +153,7 @@ function Profile({ user }) {
       </Box>
       <Divider />
       {tab === "about" && (
-        <Box sx={{ width: "500px", margin: "10px auto" }}>
+        <Box sx={{ margin: "10px auto" }}>
           <Box>
             {finalData?.map(([k, v]) => (
               <Box key={k} sx={{ display: "flex" }}>
