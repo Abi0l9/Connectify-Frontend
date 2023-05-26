@@ -15,7 +15,6 @@ function AppRoutes({ selected }) {
   return (
     <Box>
       <Routes>
-        <Route path="/sign-up" element={<SignUp />} />
         <Route
           path="/profile/:name"
           element={
@@ -37,10 +36,6 @@ function AppRoutes({ selected }) {
         <Route
           path="/messages"
           element={!loggedInUser?.userId ? <Login /> : <Messages />}
-        />
-        <Route
-          path="/inbox"
-          element={!loggedInUser?.userId ? <Login /> : <Inbox />}
         />
         <Route path="/sign-up" element={<SignUp />} />
         <Route
