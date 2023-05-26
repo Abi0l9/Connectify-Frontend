@@ -120,7 +120,7 @@ const Inbox = ({ receiver, myInbox }) => {
         </Box>
         <Box
           sx={{
-            height: "70vh",
+            height: "80vh",
             overflowY: "scroll",
             overflowX: "hidden",
             width: "100%",
@@ -140,17 +140,17 @@ const Inbox = ({ receiver, myInbox }) => {
                 </ReceiverBox>
               )}
             </Box>
-          )) || "Start a conversation with " + `${receiverInfo?.name}`}
+          )) || `Start a conversation with ${receiverInfo?.name}`}
         </Box>
         <Box>
           <form
             onSubmit={handleSendMsg}
             style={{
-              margin: "0 auto",
+              margin: ".2rem auto",
               bottom: 0,
               left: 0,
               right: 0,
-              position: "absolute",
+              position: "static",
               width: "100%",
             }}
           >

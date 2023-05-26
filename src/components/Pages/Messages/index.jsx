@@ -2,7 +2,6 @@ import {
   Avatar,
   Box,
   Button,
-  Container,
   List,
   Link,
   ListItem,
@@ -10,9 +9,9 @@ import {
   ListItemText,
   Stack,
   Typography,
-  TextField,
+  Divider,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import useConnectList from "../../../hooks/useConnectList";
 import { deepOrange } from "@mui/material/colors";
 import Inbox from "./Inbox";
@@ -24,11 +23,13 @@ function Messages() {
   const [tab, setTab] = useState("chats");
   const [receiver, setReceiver] = useState("");
 
+  const [filteredList, setFilteredList] = useState([]);
+
   const curUser = useSelector((store) => store.curUser);
   const allUsers = useSelector((state) => state.users);
 
-  const senderProfile = allUsers.find((user) => user.id === curUser.userId);
-  const convo = senderProfile.messages.find(
+  const senderProfile = allUsers?.find((user) => user.id === curUser.userId);
+  const convo = senderProfile?.messages?.find(
     (msg) =>
       (msg.sender.id === curUser.userId && msg.receiver.id === receiver) ||
       (msg.sender.id === receiver && msg.receiver.id === curUser.userId)
@@ -36,7 +37,24 @@ function Messages() {
 
   const myInbox = convo?.inbox;
 
-  const myChats = senderProfile.messages.map((ibx) => ibx?.receiver);
+  useEffect(() => {
+    if (senderProfile) {
+      const receivers = senderProfile?.messages?.map((ibx) => ibx?.receiver);
+      const senders = senderProfile?.messages?.map((ibx) => ibx?.sender);
+
+      const mergedList = [...new Set([...receivers, ...senders])];
+      const filteredList = mergedList?.filter(
+        (rcvr) => rcvr.id !== curUser.userId
+      );
+
+      setFilteredList(filteredList);
+    }
+  }, [
+    setFilteredList,
+    senderProfile,
+    senderProfile?.messages,
+    curUser?.userId,
+  ]);
 
   const handleTab = (tabName) => {
     setTab(tabName);
@@ -63,6 +81,7 @@ function Messages() {
           </Typography>
         </Stack>
       </Box>
+      <Divider />
       <Box id="connects">
         {tab === "connects" &&
           accepted?.map((user) => (
@@ -93,7 +112,7 @@ function Messages() {
       <Box id="chats">
         {tab === "chats" && (
           <Box>
-            <Chats receivers={myChats} getSenderId={getSenderId} />
+            <Chats receivers={filteredList} getSenderId={getSenderId} />
           </Box>
         )}
       </Box>
