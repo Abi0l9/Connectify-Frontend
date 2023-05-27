@@ -12,12 +12,14 @@ import {
   Container,
   InputLabel,
   CircularProgress,
+  InputAdornment,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { CREATE_USER } from "../../../Queries/userQueries";
 import { useDispatch } from "react-redux";
 import { notification } from "../../../reducers/notificationReducer";
 import VerificationPage from "./Verification";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 
 function SignUpForm() {
   const dispatch = useDispatch();
@@ -25,11 +27,13 @@ function SignUpForm() {
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
   const [gender, setGender] = useState("");
 
   const [hideComp, setHideComp] = useState(true);
   const [showSignUp, setShowSignUp] = useState(true);
+
+  const [showPwd, setShowPwd] = useState(false);
+  const visibiltyRef = useRef(null);
 
   const [signup, result] = useMutation(CREATE_USER, {
     variables: { name, email, phone, password, gender },
@@ -46,7 +50,6 @@ function SignUpForm() {
       setName("");
       setPassword("");
       setPhone("");
-      setConfirmPassword("");
       setGender("");
 
       setShowSignUp(!showSignUp);
@@ -54,10 +57,22 @@ function SignUpForm() {
     },
   });
 
+  useEffect(() => {
+    if (showPwd) {
+      visibiltyRef.current = <VisibilityOff />;
+    } else {
+      visibiltyRef.current = <Visibility />;
+    }
+  }, [showPwd, visibiltyRef]);
+
   const handleSignup = async (e) => {
     e.preventDefault();
 
     signup();
+  };
+
+  const togglePwdVisibility = () => {
+    setShowPwd(!showPwd);
   };
 
   return (
@@ -133,13 +148,26 @@ function SignUpForm() {
               variant="standard"
               required
               margin="normal"
-              type="password"
+              type={showPwd ? "text" : "password"}
               id="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               autoCapitalize="true"
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <Box
+                      ref={visibiltyRef}
+                      onClick={togglePwdVisibility}
+                      sx={{ cursor: "pointer" }}
+                    >
+                      {visibiltyRef.current}
+                    </Box>
+                  </InputAdornment>
+                ),
+              }}
             />
-            <TextField
+            {/* <TextField
               label="Confirm Password"
               fullWidth
               variant="standard"
@@ -154,7 +182,7 @@ function SignUpForm() {
               helperText={
                 password !== confirmPassword ? "password does not match." : ""
               }
-            />
+            /> */}
             <FormControl fullWidth sx={{ mt: 2 }}>
               <InputLabel>Gender</InputLabel>
               <Select
