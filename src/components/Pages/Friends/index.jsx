@@ -4,7 +4,7 @@ import PendingRequests from "./PendingRequests";
 import AcceptedRequests from "./AcceptedRequests";
 import ReceivedRequests from "./ReceivedRequests";
 import SuggestedConnects from "./SuggestedConnects";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 
 function FriendsPage() {
   const allUsers = useSelector((store) => store.users);
@@ -33,36 +33,33 @@ function FriendsPage() {
     (user) => !mergedList?.includes(user.id)
   );
 
-  useEffect(() => {
-    if (tab === "friends") {
-      tabsRef.current = (
-        <Box>
-          <AcceptedRequests accepted={accepted} />
-        </Box>
-      );
-    } else if (tab === "requests") {
-      tabsRef.current = (
-        <Box>
-          <ReceivedRequests requests={requests} />
-        </Box>
-      );
-    } else if (tab === "pendings") {
-      tabsRef.current = (
-        <Box>
-          <PendingRequests pendings={pendings} />
-        </Box>
-      );
-    } else if (tab === "suggestions") {
-      tabsRef.current = (
-        <Box>
-          <SuggestedConnects suggestions={suggestedConnections} />
-        </Box>
-      );
-    }
-  });
+  if (tab === "friends") {
+    tabsRef.current = (
+      <Box>
+        <AcceptedRequests accepted={accepted} />
+      </Box>
+    );
+  } else if (tab === "requests") {
+    tabsRef.current = (
+      <Box>
+        <ReceivedRequests requests={requests} />
+      </Box>
+    );
+  } else if (tab === "pendings") {
+    tabsRef.current = (
+      <Box>
+        <PendingRequests pendings={pendings} />
+      </Box>
+    );
+  } else if (tab === "suggestions") {
+    tabsRef.current = (
+      <Box>
+        <SuggestedConnects suggestions={suggestedConnections} />
+      </Box>
+    );
+  }
 
   const handleTabsClick = (tabName, e) => {
-    console.log(e?.target?.textContent);
     setTab(tabName);
   };
 

@@ -32,3 +32,10 @@ export const updateCache = (cache, query, newUpdate) => {
     }
   });
 };
+
+export const pageTitleSetter = (title) => {
+  const curTitle = document.title;
+  const modifiedTitle = `${curTitle} | ${title}`;
+
+  return (document.title = modifiedTitle);
+};

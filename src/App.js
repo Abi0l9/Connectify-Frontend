@@ -66,7 +66,6 @@ function App() {
   useSubscription(ACCEPTED_FRIEND_REQUEST, {
     onData: ({ data, client }) => {
       const updatedUser = data.data.acceptedFriendRequest;
-      console.log(updatedUser);
 
       updateCache(client.cache, { query: GET_VERIFIED_USERS }, updatedUser);
     },
@@ -91,7 +90,6 @@ function App() {
   useSubscription(USER_UPDATED, {
     onData: ({ data, client }) => {
       const updatedUser = data.data.userUpdated;
-      console.log(data);
 
       updateCache(client.cache, { query: GET_VERIFIED_USERS }, updatedUser);
     },
@@ -100,7 +98,6 @@ function App() {
   useSubscription(SENT_MSG, {
     onData: ({ data, client }) => {
       const updatedUser = data.data.sentMsg;
-      console.log(data);
 
       updateCache(client.cache, { query: GET_VERIFIED_USERS }, updatedUser);
     },

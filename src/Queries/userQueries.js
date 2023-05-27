@@ -51,6 +51,14 @@ const USER_DETAILS = gql`
     phone
     hobbies
     confirmationCode
+    notification {
+      id
+      count
+      content {
+        contentType
+        message
+      }
+    }
   }
 `;
 
@@ -213,6 +221,13 @@ export const SEND_MSG = gql`
     sendMsg(receiver: $receiver, content: $content) {
       ...UserDetails
     }
+  }
+  ${USER_DETAILS}
+`;
+
+export const CLEAR_NOTIFICATIONS = gql`
+  mutation clearNotifications {
+    ...UserDetails
   }
   ${USER_DETAILS}
 `;
