@@ -29,6 +29,7 @@ const authLink = setContext((_, { headers }) => {
 });
 
 const httpLink = new HttpLink({
+  // uri: "",
   uri: "http://localhost:4000",
 });
 

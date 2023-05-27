@@ -7,8 +7,8 @@ import {
   FormControlLabel,
   TextField,
   Typography,
-  CircularProgress,
   Link,
+  InputAdornment,
 } from "@mui/material";
 import React, { useState } from "react";
 import { LOGIN } from "../../../Queries/userQueries";
@@ -16,6 +16,8 @@ import { useDispatch } from "react-redux";
 // import { notification } from "../../../reducers/notificationReducer";
 import { useNavigate } from "react-router-dom";
 import { getCurUser } from "../../../reducers/loggedInUserReducer";
+import Loading from "../../../Reusables/Loading";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 
 function LoginForm() {
   const [email, setEmail] = useState("");
@@ -24,6 +26,8 @@ function LoginForm() {
   const [isError, setIsError] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const [showPwd, setShowPwd] = useState(false);
 
   const [login, result] = useMutation(LOGIN, {
     variables: { email, password },
@@ -39,6 +43,10 @@ function LoginForm() {
     },
   });
 
+  const togglePwdVisibilty = () => {
+    setShowPwd(!showPwd);
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     setIsError(false);
@@ -48,21 +56,7 @@ function LoginForm() {
 
   return (
     <Container component="main" maxWidth="xs" sx={{ mt: 3 }}>
-      {result.loading && (
-        <CircularProgress
-          sx={{
-            bgcolor: "transparent",
-            opacity: 0.5,
-            position: "absolute",
-            top: "50%",
-            left: "50%",
-            width: "100%",
-            height: "100%",
-            zIndex: 1000,
-            textAlign: "center",
-          }}
-        />
-      )}
+      {result.loading && <Loading />}
       <Box
         sx={{
           display: "flex",
@@ -95,12 +89,29 @@ function LoginForm() {
             fullWidth
             required
             id="password"
-            type="password"
+            type={showPwd ? "text" : "password"}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             autoFocus
             variant="standard"
             margin="normal"
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  {showPwd ? (
+                    <Visibility
+                      onClick={togglePwdVisibilty}
+                      sx={{ cursor: "pointer" }}
+                    />
+                  ) : (
+                    <VisibilityOff
+                      onClick={togglePwdVisibilty}
+                      sx={{ cursor: "pointer" }}
+                    />
+                  )}
+                </InputAdornment>
+              ),
+            }}
           />
           <FormControlLabel
             control={<Checkbox value="remember" color="primary" />}

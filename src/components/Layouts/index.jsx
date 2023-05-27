@@ -6,7 +6,7 @@ import Notification from "../Notification";
 
 function Layout({ selected, logout, loggedInUser }) {
   return (
-    <Box sx={{ maxWidth: "1200px" }}>
+    <Box>
       <Header logout={logout} loggedInUser={loggedInUser} />
       <Notification />
       <Box sx={{ minHeight: "100vh" }}>
