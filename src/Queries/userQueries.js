@@ -226,8 +226,10 @@ export const SEND_MSG = gql`
 `;
 
 export const CLEAR_NOTIFICATIONS = gql`
-  mutation clearNotifications {
-    ...UserDetails
+  mutation ClearNotifications {
+	  clearNotifications{
+		...UserDetails
+	  }
   }
   ${USER_DETAILS}
 `;

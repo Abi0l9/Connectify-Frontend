@@ -1,10 +1,14 @@
 import {
   ArrowDropDown,
+  CloseRounded,
+  DeleteSweepRounded,
   Inbox,
   Logout,
+  MessageOutlined,
   MessageRounded,
   Notifications,
   Person,
+  Person2Rounded,
   Settings,
   VerifiedUserSharp,
 } from "@mui/icons-material";
@@ -17,18 +21,92 @@ import {
   Badge,
   Link,
   Stack,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  List,
+  ListItem,
+  ListItemAvatar,
+  ListItemText,
 } from "@mui/material";
 import { deepOrange } from "@mui/material/colors";
 import { useState } from "react";
+import { useMutation, useQuery } from "@apollo/client";
 import { useNavigate } from "react-router-dom";
-import { useQuery } from "@apollo/client";
-import { GET_USER } from "../../../Queries/userQueries";
+import {
+  CLEAR_NOTIFICATIONS,
+  GET_USER,
+  GET_VERIFIED_USERS,
+} from "../../../Queries/userQueries";
 import { useSelector } from "react-redux";
+import { updateCache } from "../../../handlers";
+
+const NotificationModal = ({ notifications, toggleModal, modalState }) => {
+  const contents = notifications?.content.slice(-5);
+  const [clear] = useMutation(CLEAR_NOTIFICATIONS, {
+    onError: (error) => {
+      console.log(error);
+    },
+    update: (cache, response) => {
+      updateCache(
+        cache,
+        { query: GET_VERIFIED_USERS },
+        response.data.clearNotifications
+      );
+    },
+  });
+  
+  const clearNotifs = () => {
+      clear()
+      toggleModal()
+  }
+
+  return (
+    <Box>
+      <Dialog open={modalState} onClose={toggleModal}>
+        <DialogTitle>Latest Notifications</DialogTitle>
+        <DialogContent>
+          {contents?.map((content, idx) => (
+            <List key={idx}>
+              <ListItem>
+                <ListItemAvatar>
+                  {content.contentType === "friend" && <Person2Rounded />}
+                  {content.contentType === "message" && <MessageOutlined />}
+                </ListItemAvatar>
+                <Link
+                  sx={{ cursor: "pointer" }}
+                  href={
+                    content.contentType === "friend" ? "/friends" : "/messages"
+                  }
+                  underline="none"
+                >
+                  <ListItemText primary={content.message} />
+                </Link>
+              </ListItem>
+            </List>
+          ))}
+          {!contents?.length && "You have no notifications"}
+        </DialogContent>
+        <Box sx={{ m: 1 }}>
+          <Stack direction="row" justifyContent="space-between">
+            <CloseRounded onClick={toggleModal} />
+            <DeleteSweepRounded onClick={clearNotifs} />
+          </Stack>
+        </Box>
+      </Dialog>
+    </Box>
+  );
+};
 
 const UserMenu = ({ logout }) => {
   const [open, setOpen] = useState(false);
   const loggedInUser = useSelector((state) => state.curUser);
   const navigate = useNavigate();
+  const [modalState, setModalState] = useState(false);
+
+  const toggleModal = () => {
+    setModalState(!modalState);
+  };
 
   const result = useQuery(GET_USER, {
     variables: { getOneUserId: loggedInUser.userId },
@@ -63,6 +141,13 @@ const UserMenu = ({ logout }) => {
 
   return (
     <Box sx={{ display: "flex", mx: 1, alignItems: "center" }}>
+      <Box>
+        <NotificationModal
+          modalState={modalState}
+          toggleModal={toggleModal}
+          notifications={userDetails?.notification}
+        />
+      </Box>
       <Box
         sx={{
           mx: 1,
@@ -88,8 +173,12 @@ const UserMenu = ({ logout }) => {
         </Stack>
       </Box>
       <Stack direction="row" spacing={2}>
-        <Badge color="secondary" badgeContent={3} max={99}>
-          <Notifications color="white" />
+        <Badge
+          color="secondary"
+          badgeContent={userDetails?.notification.count}
+          max={99}
+        >
+          <Notifications color="white" onClick={toggleModal} />
         </Badge>
         <MessageRounded onClick={() => navigate("/messages")} />
       </Stack>
