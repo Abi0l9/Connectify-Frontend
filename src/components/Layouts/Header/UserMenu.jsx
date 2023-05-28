@@ -42,7 +42,7 @@ import { useSelector } from "react-redux";
 import { updateCache } from "../../../handlers";
 
 const NotificationModal = ({ notifications, toggleModal, modalState }) => {
-  const contents = notifications?.content.slice(-5);
+  const contents = notifications?.content.slice(-5).reverse();
   const [clear] = useMutation(CLEAR_NOTIFICATIONS, {
     onError: (error) => {
       console.log(error);

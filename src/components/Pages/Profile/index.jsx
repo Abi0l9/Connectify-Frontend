@@ -1,4 +1,4 @@
-import { EditNote } from "@mui/icons-material";
+import { EditNote, CheckCircle, HourglassTop } from "@mui/icons-material";
 import {
   Avatar,
   Box,
@@ -28,7 +28,7 @@ function Profile({ user }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { accepted } = useConnectList(user);
+  const { accepted, requests } = useConnectList(user);
   const curUser = useSelector((state) => state.curUser);
   const [userToUpdate, setUserToUpdate] = useState({});
   const [open, setOpen] = useState(false);
@@ -44,7 +44,11 @@ function Profile({ user }) {
       dispatch(notification(e.message, 3000));
     },
   });
-
+  
+  const userExistsInConnectList = accepted?.map(user => user.id)?.includes(curUser.userId)
+  const userExistsInRequestsList = requests?.map(user => user.id)?.includes(curUser.userId)
+  
+  
   useEffect(() => {
     if (user) {
       setUserToUpdate(user);
@@ -132,10 +136,21 @@ function Profile({ user }) {
           )}
         </Box>
         {userDetails?.id !== curUser?.userId && (
-          <Box sx={{ width: "100px", margin: "4px auto" }}>
-            <Stack spacing={3} direction="row">
-              <Button onClick={handleConnect}>Connect</Button>
-              <Button onClick={() => navigate("/messages")}>Message</Button>
+          <Box sx={{ margin: "4px auto" }}>
+            <Stack spacing={3} direction="row" alignItems="center" justifyContent="center">
+            <Box>
+            {
+              userExistsInConnectList ? <Button  disabled>Connected <CheckCircle color="success"/></Button> 
+              : userExistsInRequestsList ? <Button  disabled>Pending <HourglassTop color="warning"/></Button>
+              : <Button color="success" onClick={handleConnect}>Connect</Button>
+            }
+            </Box>
+                
+            <Box>
+            <Button onClick={() => navigate("/messages")}>Message</Button>
+            </Box>
+                
+              
             </Stack>
           </Box>
         )}

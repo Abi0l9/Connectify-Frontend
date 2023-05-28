@@ -6,7 +6,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { ArrowForwardIosRounded } from "@mui/icons-material";
+import { Send } from "@mui/icons-material";
 import { useState } from "react";
 import { useMutation, useQuery } from "@apollo/client";
 import {
@@ -165,7 +165,7 @@ const Inbox = ({ receiver, myInbox }) => {
                 endAdornment: (
                   <InputAdornment position="end">
                     <Button type="submit">
-                      <ArrowForwardIosRounded />
+                      <Send color="success"/>
                     </Button>
                   </InputAdornment>
                 ),

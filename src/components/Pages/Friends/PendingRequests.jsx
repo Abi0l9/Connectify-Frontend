@@ -4,6 +4,7 @@ import ListTemplate from "./ListTempate";
 const PendingRequests = ({ pendings }) => {
   return (
     <Box sx={{ maxWidth: "400px", mx: 1 }}>
+      {!pendings && <Typography>Your sent requests will show up, here...</Typography>}
       <ListTemplate list={pendings} type="pendings" />
     </Box>
   );
