@@ -175,7 +175,7 @@ const UserMenu = ({ logout }) => {
       <Stack direction="row" spacing={2}>
         <Badge
           color="secondary"
-          badgeContent={userDetails?.notification.count}
+          badgeContent={userDetails?.notification?.count}
           max={99}
         >
           <Notifications color="white" onClick={toggleModal} />

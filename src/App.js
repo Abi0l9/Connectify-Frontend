@@ -19,6 +19,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { getAllFriends } from "./reducers/friendsReducer";
 import { getUsers } from "./reducers/usersReducer";
 import { getCurUser, logoutCurUser } from "./reducers/loggedInUserReducer";
+import { GET_ALL_FEEDS } from "./Queries/feedQueries";
+import { getStoredFeeds } from "./reducers/feedReducer";
 
 function App() {
   const client = useApolloClient();
@@ -52,6 +54,13 @@ function App() {
   useQuery(GET_FRIENDS, {
     onCompleted: ({ getFriends }) => {
       dispatch(getAllFriends(getFriends));
+    },
+  });
+
+  useQuery(GET_ALL_FEEDS, {
+    pollInterval: 3000,
+    onCompleted: (data) => {
+      dispatch(getStoredFeeds(data.getAllFeeds));
     },
   });
 

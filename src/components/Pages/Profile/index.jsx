@@ -125,7 +125,7 @@ function Profile({ user }) {
         </Box>
         <Box sx={{ display: "flex" }}>
           <Box sx={{ textAlign: "center" }} flexGrow={1}>
-            <Typography variant="h5"> {userDetails?.desired_name}</Typography>
+            <Typography variant="h5"> {userDetails?.name}</Typography>
           </Box>
           {userDetails?.id === curUser?.userId && (
             <Box component="span" sx={{ mx: 1 }} onClick={openModal}>

@@ -4,8 +4,8 @@ import { notification } from "../../../reducers/notificationReducer";
 import { Avatar, Box, Button, TextField } from "@mui/material";
 import { deepOrange } from "@mui/material/colors";
 import { useMutation } from "@apollo/client";
-import { CREATE_FEED } from "../../../Queries/userQueries";
 import Loading from "../../../Reusables/Loading";
+import { CREATE_FEED } from "../../../Queries/feedQueries";
 
 function FeedForm() {
   const dispatch = useDispatch();
