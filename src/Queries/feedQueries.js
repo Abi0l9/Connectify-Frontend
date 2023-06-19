@@ -20,6 +20,10 @@ export const GET_ALL_FEEDS = gql`
         name
       }
       time
+      likes {
+        id
+        likes
+      }
     }
   }
 `;

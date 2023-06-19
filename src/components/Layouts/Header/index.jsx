@@ -5,12 +5,13 @@ import { useSelector } from "react-redux";
 function Header({ logout }) {
   const loggedInUser = useSelector((state) => state.curUser);
   return (
-    <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static">
+    <Box sx={{ flexGrow: 1, mx: 0 }}>
+      <AppBar position="static" sx={{ mx: 0 }}>
         <Toolbar>
           <Box
             sx={{
               flexGrow: 1,
+              mx: 0,
             }}
           >
             <Link href="/" color="inherit" underline="none">
