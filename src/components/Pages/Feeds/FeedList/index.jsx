@@ -3,11 +3,20 @@ import React from "react";
 import { useSelector } from "react-redux";
 import { timeSplitter } from "../../../../utils";
 import { CommentRounded, Favorite } from "@mui/icons-material";
+import { useMutation } from "@apollo/client";
+import { LIKE_FEED } from "../../../../Queries/feedQueries";
 
 function FeedList() {
   const feeds = useSelector((state) => state.feed);
+  const [likeFeed] = useMutation(LIKE_FEED, {
+    onCompleted(data) {
+      console.log(data);
+    },
+  });
 
-  console.log(feeds);
+  const handleLike = (feedId) => {
+    likeFeed({ variables: { feedId } });
+  };
 
   return (
     <Box>
@@ -34,11 +43,23 @@ function FeedList() {
                     flexDirection="row"
                     justifyContent="space-between"
                     alignItems="center"
-                    sx={{ width: "50px" }}
+                    sx={{ width: "70px" }}
                   >
                     <Box>
-                      <Badge badgeContent={0} color="success">
-                        <Favorite color="error" />
+                      <Badge
+                        onClick={() => handleLike(feed.id)}
+                        badgeContent={feed?.likes}
+                        color="success"
+                      >
+                        <Favorite
+                          color="error"
+                          sx={{
+                            cursor: "pointer",
+                            ":active": {
+                              color: "rebeccapurple",
+                            },
+                          }}
+                        />
                       </Badge>
                     </Box>
                     <Box>

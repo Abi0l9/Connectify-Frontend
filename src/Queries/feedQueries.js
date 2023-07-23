@@ -20,10 +20,32 @@ export const GET_ALL_FEEDS = gql`
         name
       }
       time
-      likes {
+      likes
+    }
+  }
+`;
+
+export const GET_ONE_FEED = gql`
+  query getOneFeed($feedId: String!) {
+    getOneFeed(id: $feedId) {
+      id
+      content
+      poster {
         id
-        likes
+        name
       }
+      time
+      likes
+    }
+  }
+`;
+
+export const LIKE_FEED = gql`
+  mutation likeFeed($feedId: String!) {
+    likeFeed(feedId: $feedId) {
+      id
+      content
+      likes
     }
   }
 `;
