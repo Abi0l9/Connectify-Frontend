@@ -1,13 +1,11 @@
 import { gql } from "@apollo/client";
-import { USER_DETAILS } from "./userQueries";
 
 export const CREATE_FEED = gql`
   mutation createFeed($content: String!, $media: String) {
     createFeed(content: $content, media: $media) {
-      ...UserDetails
+      content
     }
   }
-  ${USER_DETAILS}
 `;
 
 export const GET_ALL_FEEDS = gql`

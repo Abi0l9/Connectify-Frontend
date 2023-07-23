@@ -4,3 +4,7 @@ export const timeSplitter = (str) => {
 
   return time;
 };
+
+// export const dateSplitter = (str) => {
+//   const splitted = str?.split(" ")?.slice()
+// }

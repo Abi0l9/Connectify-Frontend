@@ -18,19 +18,14 @@ function FeedForm() {
     onError: (e) => {
       dispatch(notification(e.message, 2000));
     },
-
-    onCompleted: (data) => {
-      console.log(data);
-
-      setContent("");
-      setMedia("");
-    },
   });
 
   const handleCreateFeed = (e) => {
     e.preventDefault();
 
     createFeed();
+    setContent("");
+    setMedia("");
   };
 
   return (
